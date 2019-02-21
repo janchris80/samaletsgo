@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
             'first_name' => 'Mary Grace',
             'middle_name' => '',
             'last_name' => 'Puyot',
-            'email' => 'admin@gmail.com',
+            'email' => 'grace@fakemail.com',
             'username' => 'admin',
             'password' => bcrypt('123123'),
             'created_at' => '2019-01-01 12:59:59',
@@ -25,11 +25,11 @@ class UsersSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'role_id' => '2',
+            'role_id' => '1',
             'first_name' => 'Kathleen Kaye',
             'middle_name' => '',
             'last_name' => 'Soliva',
-            'email' => 'kaye@gmail.com',
+            'email' => 'kate@fakemail.com',
             'username' => 'kayesoliva',
             'password' => bcrypt('123123'),
             'created_at' => '2019-01-01 12:59:59',
@@ -37,11 +37,11 @@ class UsersSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'role_id' => '2',
+            'role_id' => '1',
             'first_name' => 'Kharmella',
             'middle_name' => '',
             'last_name' => 'Lacap',
-            'email' => 'lacap@gmail.com',
+            'email' => 'lacap@fakemail.com',
             'username' => 'lacap123',
             'password' => bcrypt('123123'),
             'created_at' => '2019-01-01 12:59:59',
