@@ -274,9 +274,6 @@ function accountFormValidation (form) {
             'first_name': {
                 required: true
             },
-            'middle_name': {
-                required: true
-            },
             'last_name': {
                 required: true
             },
