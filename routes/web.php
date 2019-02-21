@@ -12,5 +12,25 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
+});
+
+Auth::routes();
+
+Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::resource('category', 'CategoryController');
+    Route::resource('resort', 'ResortController', ['only' => ['show', 'index', 'destroy']]);
+    Route::resource('event', 'EventController');
+    Route::resource('tourist', 'TouristController');
+    Route::resource('archive', 'ArchiveController');
+    Route::resource('hotline', 'HotlineController', ['except' => ['show']]);
+    Route::resource('profile', 'ProfileController');
+    Route::resource('account', 'AccountController');
+});
+
+Route::group(['as' => 'owner.', 'prefix' => 'owner', 'namespace' => 'Owner', 'middleware' => ['auth', 'owner']], function () {
+    Route::get('dashboard', 'DashboardController@index')->name('dashboard');
+    Route::resource('resort', 'ResortController');
+    Route::resource('profile', 'ProfileController');
 });

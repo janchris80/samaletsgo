@@ -2,8 +2,9 @@
 
 namespace App;
 
+use App\Model\Resort;
+use App\Model\Role;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -16,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'middle_name', 'last_name', 'email', 'password', 'username'
     ];
 
     /**
@@ -28,12 +29,18 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function fullname()
+    {
+        return $this->first_name . ' ' . $this->middle_name . ' ' . $this->last_name;
+    }
+
+    public function resorts()
+    {
+        return $this->hasMany(Resort::class);
+    }
 }
