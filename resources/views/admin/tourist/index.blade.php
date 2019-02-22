@@ -54,7 +54,7 @@
                                             @endforeach
                                         </td>
                                         <td class="text-capitalize">{{ $datum->address }}</td>
-                                        <td>{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
