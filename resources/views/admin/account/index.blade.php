@@ -38,8 +38,8 @@
                                     <tr>
                                         <td>{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}</td>
                                         <td>{{ $user->email }}</td>
-                                        <td>{{ date('M d, Y h:i:s A', strtotime($user->updated_at)) }}</td>
-                                        <td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($user->updated_at)) }}</td>
+                                        <td width="150px">
                                             <button class="btn btn-warning">SET TO ADMIN</button>
                                         </td>
                                     </tr>

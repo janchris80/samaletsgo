@@ -37,8 +37,8 @@
                                     <tr>
                                         <td>{{ $datum->name }}</td>
                                         <td>{{ $datum->address }}</td>
-                                        <td>{{ date('M d, Y', strtotime($datum->date)) }}</td>
-                                        <td>{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
+                                        <td width="100px">{{ date('M d, Y', strtotime($datum->date)) }}</td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,8 +93,8 @@
                                 @foreach ($hotlines as $key => $datum)
                                     <tr>
                                         <td>{{ str_limit($datum->name, 50) }}</td>
-                                        <td>{{ $datum->number }}</td>
-                                        <td>{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
+                                        <td width="120px">{{ $datum->number }}</td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -140,8 +140,8 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Address</th>
-                                    <th>Approved</th>
+                                    <th>Status</th>
+                                    <th>Updated at</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -149,8 +149,12 @@
                                 @foreach ($resorts as $datum)
                                     <tr>
                                         <td>{{ $datum->name }}</td>
-                                        <td>{{ $datum->address }}</td>
-                                        <td>{{ $datum->is_approved }}</td>
+                                        <td width="80px">
+                                            <label class="label {{ $datum->is_approve ? 'label-success' : 'label-warning' }}">
+                                                {{ $datum->is_approve ? 'APPROVED' : 'PENDING' }}
+                                            </label>
+                                        </td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -212,7 +216,7 @@
                                             @endforeach
                                         </td>
                                         <td>{{ $datum->address }}</td>
-                                        <td>{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
+                                        <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
                                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

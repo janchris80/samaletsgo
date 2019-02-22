@@ -40,7 +40,7 @@
                                 @foreach ($resorts as $datum)
                                     <tr>
                                         <td>{{ $datum->name }}</td>
-                                        <td>
+                                        <td width="80px">
                                             <label class="label {{ $datum->is_approve ? 'label-success' : 'label-warning' }}">
                                                 {{ $datum->is_approve ? 'APPROVED' : 'PENDING' }}
                                             </label>

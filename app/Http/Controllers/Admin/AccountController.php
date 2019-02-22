@@ -5,13 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AccountController extends Controller
 {
 
     public function index()
     {
-        $users = User::all();
+        $users = User::query()
+            ->where('id','!=', Auth::id())
+            ->latest()
+            ->get();
+
         return view('admin.account.index',[
             'users' => $users
         ]);

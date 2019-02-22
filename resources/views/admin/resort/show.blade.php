@@ -29,19 +29,19 @@
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
                                 @if($resort->is_approve == false)
-                                    <button type="button" class="btn btn-success waves-effect" onclick="approvePost({{ $resort->id }})">
+                                    <a href="javascript:void(0)" class="btn btn-success waves-effect" onclick="approvePost({{ $resort->id }})">
                                         <i class="material-icons">done</i>
                                         <span>Approve</span>
-                                    </button>
+                                    </a>
                                     <form method="post" action="{{ route('admin.resort.update', $resort->id) }}" id="approval-form" style="display: none">
                                         @csrf
                                         @method('PUT')
                                     </form>
                                 @else
-                                    <button type="button" class="btn btn-success" disabled>
+                                    <a type="button" class="btn btn-success" disabled>
                                         <i class="material-icons">done</i>
                                         <span>Approved</span>
-                                    </button>
+                                    </a>
                                 @endif
                             </li>
                         </ul>
@@ -63,19 +63,23 @@
                     </div>
                     <div class="body">
                         <ul>
-                            @foreach ($amenities as $amenity)
-                                <li>
-                                    {!! $amenity->name !!}
-                                </li>
-                                <ul>
-                                    @if ($amenity->description)
-                                        <li>{!! $amenity->description !!}</li>
-                                    @endif
-                                    @if ($amenity->rate)
-                                        <li>P{!! $amenity->rate !!}</li>
-                                    @endif
-                                </ul>
-                            @endforeach
+                            @if (count($amenities))
+                                @foreach ($amenities as $amenity)
+                                    <li>
+                                        {!! $amenity->name !!}
+                                    </li>
+                                    <ul>
+                                        @if ($amenity->description)
+                                            <li>{!! $amenity->description !!}</li>
+                                        @endif
+                                        @if ($amenity->rate)
+                                            <li>P{!! $amenity->rate !!}</li>
+                                        @endif
+                                    </ul>
+                                @endforeach
+                            @else
+                                <h4><i>No Amenity</i></h4>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -91,22 +95,26 @@
                     </div>
                     <div class="body">
                         <ul>
-                            @foreach ($entrances as $entrance)
-                                <li>
-                                    {!! $entrance->agetype !!} ({!! $entrance->tour !!})
-                                </li>
-                                <ul>
-                                    @if ($entrance->rate)
-                                        <li>P{!! $entrance->rate !!}</li>
-                                    @endif
-                                    @if ($entrance->person)
-                                        <li>{!! $entrance->person !!}</li>
-                                    @endif
-                                    @if ($entrance->description)
-                                        <li>{!! $entrance->description !!}</li>
-                                    @endif
-                                </ul>
-                            @endforeach
+                            @if (count($entrances))
+                                @foreach ($entrances as $entrance)
+                                    <li>
+                                        {!! $entrance->agetype !!} ({!! $entrance->tour !!})
+                                    </li>
+                                    <ul>
+                                        @if ($entrance->rate)
+                                            <li>P{!! $entrance->rate !!}</li>
+                                        @endif
+                                        @if ($entrance->person)
+                                            <li>{!! $entrance->person !!}</li>
+                                        @endif
+                                        @if ($entrance->description)
+                                            <li>{!! $entrance->description !!}</li>
+                                        @endif
+                                    </ul>
+                                @endforeach
+                            @else
+                                <h4><i>No Entrance</i></h4>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -122,22 +130,26 @@
                     </div>
                     <div class="body">
                         <ul>
-                            @foreach ($cottages as $cottage)
-                                <li>
-                                    {!! $cottage->name !!}
-                                </li>
-                                <ul>
-                                    @if ($cottage->description)
-                                        <li>{!! $cottage->description !!}</li>
-                                    @endif
-                                    @if ($cottage->rate)
-                                        <li>P{!! $cottage->rate !!}</li>
-                                    @endif
-                                    @if ($cottage->person)
-                                        <li>Person: {!! $cottage->person !!}</li>
-                                    @endif
-                                </ul>
-                            @endforeach
+                            @if (count($cottages))
+                                @foreach ($cottages as $cottage)
+                                    <li>
+                                        {!! $cottage->name !!}
+                                    </li>
+                                    <ul>
+                                        @if ($cottage->description)
+                                            <li>{!! $cottage->description !!}</li>
+                                        @endif
+                                        @if ($cottage->rate)
+                                            <li>P{!! $cottage->rate !!}</li>
+                                        @endif
+                                        @if ($cottage->person)
+                                            <li>Person: {!! $cottage->person !!}</li>
+                                        @endif
+                                    </ul>
+                                @endforeach
+                            @else
+                                <h4><i>No Cottage</i></h4>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -153,22 +165,26 @@
                     </div>
                     <div class="body">
                         <ul>
-                            @foreach ($packages as $package)
-                                <li>
-                                    {!! $package->name !!}
-                                </li>
-                                <ul>
-                                    @if ($package->description)
-                                        <li>{!! $package->description !!}</li>
-                                    @endif
-                                    @if ($package->rate)
-                                        <li>P{!! $package->rate !!}</li>
-                                    @endif
-                                    @if ($package->person)
-                                        <li>Person: {!! $package->person !!}</li>
-                                    @endif
-                                </ul>
-                            @endforeach
+                            @if (count($packages))
+                                @foreach ($packages as $package)
+                                    <li>
+                                        {!! $package->name !!}
+                                    </li>
+                                    <ul>
+                                        @if ($package->description)
+                                            <li>{!! $package->description !!}</li>
+                                        @endif
+                                        @if ($package->rate)
+                                            <li>P{!! $package->rate !!}</li>
+                                        @endif
+                                        @if ($package->person)
+                                            <li>Person: {!! $package->person !!}</li>
+                                        @endif
+                                    </ul>
+                                @endforeach
+                            @else
+                                <h4><i>No Package</i></h4>
+                            @endif
                         </ul>
                     </div>
                 </div>

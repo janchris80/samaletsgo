@@ -73,6 +73,57 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="row clearfix">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Top 5 Trending Resort</h2>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Name</th>
+                                    <th>Rating</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Isla Reta</td>
+                                    <td>1,500</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Bluejazz</td>
+                                    <td>905</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Bluebliss</td>
+                                    <td>456</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td></td>
+                                    <td>413</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td></td>
+                                    <td>401</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 @endsection
 
 @push('js')

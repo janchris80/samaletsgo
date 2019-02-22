@@ -33,30 +33,31 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img src="{{ Storage::disk('public')->url('profile/'.Auth::user()->image) }}" alt="qwe" />
+                            <img src="{{ asset('storage/profile/default.jpg') }}" alt="qwe" />
                         </div>
                         <div class="content-area">
-                            <h3>Marc K. Hammond</h3>
-                            <p>Web Software Developer</p>
-                            <p>{{ Storage::disk('public')->url('profile/'.Auth::user()->image) }}</p>
+                            <h3 class="text-capitalize">{{ $profile->first_name }}</h3>
+                            <p></p>
+                            <p class="text-capitalize">{!! $profile->role->name !!}</p>
                         </div>
                     </div>
                     <div class="profile-footer">
-                        <ul>
-                            <li>
-                                <span>Followers</span>
-                                <span>1.234</span>
-                            </li>
-                            <li>
-                                <span>Following</span>
-                                <span>1.201</span>
-                            </li>
-                            <li>
-                                <span>Friends</span>
-                                <span>14.252</span>
-                            </li>
-                        </ul>
-                        <button class="btn btn-primary btn-lg waves-effect btn-block">FOLLOW</button>
+                        @if ($profile->role->id == 2)
+                            <ul>
+                                <li>
+                                    <span>Resort Owned</span>
+                                    <span>{{ $resort->count() }}</span>
+                                </li>
+                                <li>
+                                    <span>Following</span>
+                                    <span>1.201</span>
+                                </li>
+                                <li>
+                                    <span>Friends</span>
+                                    <span>14.252</span>
+                                </li>
+                            </ul>
+                        @endif
                     </div>
                 </div>
 
@@ -126,7 +127,7 @@
                                             <div class="media">
                                                 <div class="media-left">
                                                     <a href="#">
-                                                        <img src="../../images/user-lg.jpg" />
+                                                        <img src="" />
                                                     </a>
                                                 </div>
                                                 <div class="media-body">
@@ -143,7 +144,7 @@
                                                     <p>I am a very simple wall post. I am good at containing <a href="#">#small</a> bits of <a href="#">#information</a>. I require little more information to use effectively.</p>
                                                 </div>
                                                 <div class="post-content">
-                                                    <img src="../../images/profile-post-image.jpg" class="img-responsive" />
+                                                    <img src="" class="img-responsive" />
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +183,7 @@
                                             <div class="media">
                                                 <div class="media-left">
                                                     <a href="#">
-                                                        <img src="{{ Storage::disk('public')->url('profile/'.Auth::user()->image) }}" />
+                                                        <img src="" />
                                                     </a>
                                                 </div>
                                                 <div class="media-body">

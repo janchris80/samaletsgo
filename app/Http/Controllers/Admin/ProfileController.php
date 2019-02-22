@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\Resort;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,8 +15,14 @@ class ProfileController extends Controller
 {
     public function index()
     {
+        $resort = Resort::query()
+            ->where('user_id','=', Auth::id())
+            ->latest()
+            ->get();
+
         return view('admin.profile.index',[
-            'profile' => Auth::user()
+            'profile' => Auth::user(),
+            'resort' => $resort
         ]);
     }
 

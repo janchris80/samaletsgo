@@ -47,7 +47,7 @@
                                 @foreach ($hotlines as $key => $datum)
                                     <tr>
                                         <td>{{ str_limit($datum->name, 50) }}</td>
-                                        <td>{{ $datum->number }}</td>
+                                        <td width="120px">{{ $datum->number }}</td>
                                         <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">
