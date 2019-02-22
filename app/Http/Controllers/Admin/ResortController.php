@@ -89,13 +89,14 @@ class ResortController extends Controller
         ');
 
 
+
         return view('admin.resort.show',[
             'resort' => $resort,
             'categories' => $categories,
             'entrances' => $entrances,
             'cottages' => $cottages,
             'packages' => $packages,
-            'amenities' => $amenities,
+            'amenities' => $amenities
         ]);
     }
 

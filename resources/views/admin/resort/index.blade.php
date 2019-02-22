@@ -31,7 +31,7 @@
                                 <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Address</th>
+                                    <th>Status</th>
                                     <th>Update at</th>
                                     <th>Action</th>
                                 </tr>
@@ -42,7 +42,7 @@
                                         <td>{{ $datum->name }}</td>
                                         <td>
                                             <label class="label {{ $datum->is_approve ? 'label-success' : 'label-warning' }}">
-                                                <i>{{ $datum->is_approve ? 'Approved' : 'Not yet approved' }}</i>
+                                                {{ $datum->is_approve ? 'APPROVED' : 'PENDING' }}
                                             </label>
                                         </td>
                                         <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>

@@ -29,7 +29,7 @@
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
                                 @if($resort->is_approve == false)
-                                    <button type="button" class="btn btn-xs btn-warning waves-effect pull-right" onclick="approvePost({{ $resort->id }})">
+                                    <button type="button" class="btn btn-success waves-effect" onclick="approvePost({{ $resort->id }})">
                                         <i class="material-icons">done</i>
                                         <span>Approve</span>
                                     </button>
@@ -38,8 +38,9 @@
                                         @method('PUT')
                                     </form>
                                 @else
-                                    <button type="button" class="btn btn-xs btn-success pull-right" disabled>
+                                    <button type="button" class="btn btn-success" disabled>
                                         <i class="material-icons">done</i>
+                                        <span>Approved</span>
                                     </button>
                                 @endif
                             </li>

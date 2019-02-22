@@ -43,12 +43,21 @@ class DashboardController extends Controller
             array_push($category_tourist, count($tourist));
         }
 
+        $pending = Resort::query()
+            ->where('is_approve','=',0)
+            ->get();
+
+        $approve = Resort::query()
+            ->where('is_approve','=',1)
+            ->get();
 
         return view('admin.dashboard',[
             'resorts' => $resorts,
             'categories' => $categories,
             'category_resort' => $category_resort,
-            'category_tourist' => $category_tourist
+            'category_tourist' => $category_tourist,
+            'pending' => $pending,
+            'approved' => $approve,
         ]);
     }
 }
