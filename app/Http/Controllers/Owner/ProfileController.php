@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers\Owner;
 
+use App\Model\Resort;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
 
     public function index()
     {
-        return view('owner.profile.index',[
-            'profile' => Auth::user()
+        $resort = Resort::query()
+            ->where('user_id','=', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('admin.profile.index',[
+            'profile' => Auth::user(),
+            'resort' => $resort
         ]);
     }
 
@@ -24,7 +33,35 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'image' => 'required',
+            'categories' => 'required',
+            'tags' => 'required',
+            'body' => 'required',
+        ]);
+        $image = $request->file('image');
+        $slug = str_slug($request->title);
+        if(isset($image))
+        {
+            // make unique name for image
+            $currentDate = Carbon::now()->toDateString();
+            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+
+            if(!Storage::disk('public')->exists('post'))
+            {
+                Storage::disk('public')->makeDirectory('post');
+            }
+
+            $postImage = Image::make($image)->resize(1600,1066)->stream();
+            Storage::disk('public')->put('profile/'.$imageName,$postImage);
+
+        } else {
+            $imageName = "default.png";
+        }
+
+        $user = new User();
     }
 
     public function show(User $user)
@@ -34,7 +71,7 @@ class ProfileController extends Controller
 
     public function edit(User $user)
     {
-        return view('owner.profile.edit',[
+        return view('admin.profile.edit',[
             'profile' => $user
         ]);
     }
