@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class ProfileController extends Controller
 {
@@ -23,7 +26,35 @@ class ProfileController extends Controller
 
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'image' => 'required',
+            'categories' => 'required',
+            'tags' => 'required',
+            'body' => 'required',
+        ]);
+        $image = $request->file('image');
+        $slug = str_slug($request->title);
+        if(isset($image))
+        {
+            // make unique name for image
+            $currentDate = Carbon::now()->toDateString();
+            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+
+            if(!Storage::disk('public')->exists('post'))
+            {
+                Storage::disk('public')->makeDirectory('post');
+            }
+
+            $postImage = Image::make($image)->resize(1600,1066)->stream();
+            Storage::disk('public')->put('profile/'.$imageName,$postImage);
+
+        } else {
+            $imageName = "default.png";
+        }
+
+        $user = new User();
     }
 
     public function show(User $user)

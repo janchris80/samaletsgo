@@ -22,6 +22,7 @@ class ResortController extends Controller
     public function index()
     {
         $resorts = Resort::query()
+            ->where('user_id','=', Auth::id())
             ->latest()
             ->get();
         return view('owner.resort.index',[
@@ -138,6 +139,7 @@ class ResortController extends Controller
               LEFT JOIN categories c 
                 ON c.`id` = cr.`category_id` 
             WHERE r.`id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY cr.updated_at 
         ');
 
@@ -150,6 +152,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = e.`resort_id` 
             WHERE e.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY e.`updated_at` 
         ');
 
@@ -162,6 +165,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = c.`resort_id` 
             WHERE c.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY c.`updated_at` 
         ');
 
@@ -174,6 +178,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = p.`resort_id` 
             WHERE p.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY p.`updated_at` 
         ');
 
@@ -186,6 +191,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = a.`resort_id` 
             WHERE a.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY a.`updated_at` 
         ');
 
@@ -215,6 +221,7 @@ class ResortController extends Controller
               LEFT JOIN categories c 
                 ON c.`id` = cr.`category_id` 
             WHERE r.`id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY cr.updated_at 
         ');
 
@@ -227,6 +234,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = e.`resort_id` 
             WHERE e.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY e.`updated_at` 
         ');
 
@@ -239,6 +247,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = c.`resort_id` 
             WHERE c.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY c.`updated_at` 
         ');
 
@@ -251,6 +260,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = p.`resort_id` 
             WHERE p.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY p.`updated_at` 
         ');
 
@@ -263,6 +273,7 @@ class ResortController extends Controller
               LEFT JOIN resorts r 
                 ON r.id = a.`resort_id` 
             WHERE a.`resort_id` = '.$resort->id.'
+            AND r.`user_id` = '.Auth::id().'
             ORDER BY a.`updated_at` 
         ');
 
