@@ -20,6 +20,8 @@ class CreateResortsTable extends Migration
             $table->string('slug')->unique();
             $table->longText('description');
             $table->string('address');
+            $table->string('is_approve')->nullable();
+            $table->unsignedInteger('approve_by')->nullable();
             $table->timestamps();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->softDeletes();
@@ -28,6 +30,7 @@ class CreateResortsTable extends Migration
                 ->onDelete('cascade');
 
             $table->foreign('deleted_by')->references('id')->on('users');
+            $table->foreign('approve_by')->references('id')->on('users');
         });
     }
 
