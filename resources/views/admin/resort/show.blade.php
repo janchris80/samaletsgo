@@ -25,6 +25,25 @@
                         @foreach ($categories as $category)
                             <span class="label bg-teal">{!! $category->name !!}</span>
                         @endforeach
+
+                        <ul class="header-dropdown m-r--5">
+                            <li class="dropdown">
+                                @if($resort->is_approve == false)
+                                    <button type="button" class="btn btn-xs btn-warning waves-effect pull-right" onclick="approvePost({{ $resort->id }})">
+                                        <i class="material-icons">done</i>
+                                        <span>Approve</span>
+                                    </button>
+                                    <form method="post" action="{{ route('admin.resort.update', $resort->id) }}" id="approval-form" style="display: none">
+                                        @csrf
+                                        @method('PUT')
+                                    </form>
+                                @else
+                                    <button type="button" class="btn btn-xs btn-success pull-right" disabled>
+                                        <i class="material-icons">done</i>
+                                    </button>
+                                @endif
+                            </li>
+                        </ul>
                     </div>
                     <div class="body">
                         {!! $resort->description !!}
@@ -159,4 +178,24 @@
 @stop
 
 @push('js')
+    <script>
+        function approvePost(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You want to approve this resort?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result) {
+                        event.preventDefault();
+                        document.getElementById('approval-form').submit();
+                        swal("Done! Successfully Approve", {
+                            icon: "success",
+                        });
+                    }
+                });
+        }
+    </script>
 @endpush

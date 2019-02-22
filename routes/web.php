@@ -20,7 +20,7 @@ Auth::routes();
 Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['auth', 'admin']], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('category', 'CategoryController');
-    Route::resource('resort', 'ResortController', ['only' => ['show', 'index', 'destroy']]);
+    Route::resource('resort', 'ResortController', ['only' => ['show', 'index', 'destroy', 'update']]);
     Route::resource('event', 'EventController');
     Route::resource('tourist', 'TouristController');
     Route::resource('archive', 'ArchiveController');

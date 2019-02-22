@@ -40,7 +40,11 @@
                                 @foreach ($resorts as $datum)
                                     <tr>
                                         <td>{{ $datum->name }}</td>
-                                        <td>{{ $datum->address }}</td>
+                                        <td>
+                                            <label class="label {{ $datum->is_approve ? 'label-success' : 'label-warning' }}">
+                                                <i>{{ $datum->is_approve ? 'Approved' : 'Not yet approved' }}</i>
+                                            </label>
+                                        </td>
                                         <td width="170px">{{ date('M d, Y h:i:s A', strtotime($datum->updated_at)) }}</td>
                                         <td width="150px">
                                             <div class="btn-group">

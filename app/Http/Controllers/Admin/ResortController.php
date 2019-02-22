@@ -7,6 +7,7 @@ use App\Model\Resort;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -15,7 +16,9 @@ class ResortController extends Controller
 
     public function index()
     {
-        $resorts = Resort::latest()->get();
+        $resorts = Resort::query()
+            ->latest()
+            ->get();
         return view('admin.resort.index',[
             'resorts' => $resorts
         ]);
@@ -94,6 +97,15 @@ class ResortController extends Controller
             'packages' => $packages,
             'amenities' => $amenities,
         ]);
+    }
+
+    public function update(Request $request, Resort $resort)
+    {
+        $resort->is_approve = 1;
+        $resort->approve_by = Auth::user()->id;
+        $resort->save();
+
+        return back();
     }
 
     public function destroy(Resort $resort)

@@ -28,6 +28,7 @@ class ResortApiController extends Controller
                     ON r.`id` = cr.`resort_id` 
                 WHERE r.`id` = ' . $resort->id . '
                   AND r.`deleted_at` IS NULL 
+                  AND r.`is_approve` = 1 
                 GROUP BY cr.`category_id` 
                 ORDER BY r.`updated_at`
             ');
@@ -180,6 +181,7 @@ class ResortApiController extends Controller
               )
               AND p.`rate` <= ' . $request->budget . '
               AND r.`deleted_at` IS NULL
+              AND r.`is_approve` = 1
             ');
 
         foreach ($sql as $index => $resort) {
@@ -194,6 +196,7 @@ class ResortApiController extends Controller
                     ON r.`id` = cr.`resort_id` 
                 WHERE r.`id` = ' . $resort->resort_id . '
                   AND r.`deleted_at` IS NULL 
+                  AND r.`is_approve` = 1
                 GROUP BY cr.`category_id` 
                 ORDER BY r.`updated_at`
             ');
@@ -320,6 +323,8 @@ class ResortApiController extends Controller
                                     LEFT JOIN categories
                                     ON categories.id = category_resort.category_id
                                     $appendTour 
+                                    WHERE r.`is_approve` = 1
+                                    AND r.`deleted_at` IS NULL
                                     GROUP BY resorts.name  ");
 
         foreach ($resorts as $resort) {
