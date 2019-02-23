@@ -15,7 +15,10 @@ class ResortApiController extends Controller
     public function index()
     {
         $data = [];
-        $resorts = Resort::all();
+        $resorts = Resort::query()
+            ->where('is_approve','=',1)
+            ->latest()
+            ->get();
         foreach ($resorts as $resort) {
             $category = DB::select('
                 SELECT 
