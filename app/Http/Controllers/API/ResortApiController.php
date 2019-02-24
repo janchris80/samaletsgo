@@ -52,7 +52,7 @@ class ResortApiController extends Controller
                 ->where('images.is_frontpage','=', 1)
                 ->leftJoin('images','images.resort_id','resorts.id')
                 ->limit(1)
-                ->get();
+                ->first();
 
             $categories = [];
             $packages = [];
@@ -108,7 +108,7 @@ class ResortApiController extends Controller
                 'entrance' => $entrances,
                 'cottage' => $cottages,
                 'amenity' => $amenities,
-                'image' => $images
+                'image' => $image
             ];
 
             array_push($data, $result);
