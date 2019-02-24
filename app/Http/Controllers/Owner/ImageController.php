@@ -46,13 +46,17 @@ class ImageController extends Controller
                 Storage::disk('public')->makeDirectory('resort');
             }
             $resortImage = Images::make($images)->resize(1600,1066)->stream();
-            Storage::disk('public')->put('resort/'.$ext,$resortImage);
+            $path = Storage::disk('public')->put('resort/'.$ext,$resortImage);
 
-            echo 'success';
-
+            $img = new Image();
+            $img->filename = $ext;
+            $img->file_location = $path;
+            $img->resort_id = $request->id;
+            $img->save();
+            return response()->json(['success'=> $ext]);
         }
         else {
-            return 'walaa';
+            return response()->json(['error'=> 'somethings wrong']);
         }
 
 //        $slug = str_slug($request->name);
@@ -117,5 +121,16 @@ class ImageController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function fileDestroy(Request $request)
+    {
+        $filename =  $request->get('filename');
+        Image::where('filename',$filename)->delete();
+        $path=public_path().'/images/'.$filename;
+        if (file_exists($path)) {
+            unlink($path);
+        }
+        return $filename;
     }
 }

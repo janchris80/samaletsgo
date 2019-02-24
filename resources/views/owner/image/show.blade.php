@@ -85,6 +85,26 @@
                 acceptedFiles: ".JPEG, .JPG, .PNG, .GIF",
                 addRemoveLinks: true,
                 timeout: 5000,
+                removedfile: function(file)
+                {
+                    let name = file.upload.filename;
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        },
+                        type: 'POST',
+                        url: '{{ url("image/delete") }}',
+                        data: {filename: name},
+                        success: function (data){
+                            console.log("File has been successfully removed!!");
+                        },
+                        error: function(e) {
+                            console.log(e);
+                        }});
+                    let fileRef;
+                    return (fileRef = file.previewElement) != null ?
+                        fileRef.parentNode.removeChild(file.previewElement) : void 0;
+                },
                 success: function(file, response)
                 {
                     console.log(file);
