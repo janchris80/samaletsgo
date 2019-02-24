@@ -35,18 +35,22 @@
 
                     </div>
                     <div class="body">
-                        {{--<h3 class="jumbotron">Laravel Multiple Images Upload Using Dropzone</h3>--}}
-                        {{--<form method="post" action="{{ route('owner.image.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">--}}
-                            {{--@csrf--}}
-                            {{--<input hidden name="id" value="{{ $resort['id'] }}">--}}
-                        {{--</form>--}}
-
-                        <form action="{{ route('owner.image.store') }}" method="POST" enctype="multipart/form-data">
+                        <form method="post" action="{{ route('owner.image.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                             @csrf
-                            <input type="file" class="form-control" name="images" />
-                            <input type="hidden" class="form-control" name="id" value="{{ $resort['id'] }}"/>
-                            <input type="submit">
+                            <div class="dz-message">
+                                <div class="drag-icon-cph">
+                                    <i class="material-icons">touch_app</i>
+                                </div>
+                                <h3>Drop files here or click to upload.</h3>
+                                <em>(This is just a demo dropzone. Selected files are <strong>not</strong> actually uploaded.)</em>
+                            </div>
+                            <div class="fallback">
+                                <input name="file" type="file" multiple />
+                                <input hidden name="id" value="{{ $resort['id'] }}">
+                                <input hidden name="name" value="{{ $resort['name'] }}">
+                            </div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -61,8 +65,15 @@
     <script src="{{ asset('assets/backend/plugins/dropzone/min/dropzone.min.js') }}"></script>
 
     <script type="text/javascript">
+
+        // Dropzone.options.frmFileUpload = {
+        //     paramName: "file",
+        //     maxFilesize: 2
+        // };
+
         Dropzone.options.dropzone =
             {
+                paramName: "file",
                 maxFilesize: 10000,
                 renameFile: function(file) {
                     var dt = new Date();
