@@ -86,13 +86,13 @@
                 timeout: 5000,
                 success: function(file, response)
                 {
-                    console.log(file);
-                    console.log(response);
+                    console.log('File: ', file);
+                    console.log('Response: ', response);
                 },
                 error: function(file, response)
                 {
-                    console.log(file);
-                    console.log(response);
+                    console.log('File: ', file);
+                    console.log('Response: ', response);
                     return false;
                 }
             };

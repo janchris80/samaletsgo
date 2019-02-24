@@ -36,7 +36,9 @@ class ImageController extends Controller
 //
         $image = $request->file('image');
 
-        dd($image);die;
+        return response()->json([
+            'image' => $image,
+        ]);
 //        $slug = str_slug($request->name);
 //        if($request->hasFile('images'))
 //        {
