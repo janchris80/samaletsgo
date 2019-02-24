@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Owner;
 
 use App\Model\Image;
 use App\Model\Resort;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -25,16 +26,17 @@ class ImageController extends Controller
 
         $data = [];
         if ($request->hasFile('images')){
+            $currentDate = Carbon::now()->toDateString();
             $images = $request->file('images');
             $size = $images->getSize();
             $type = $images->getClientMimeType();
             $name = $images->getClientOriginalName();
-            $ext = $images->getClientOriginalExtension();
+            $ext = $currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
             $data = [
                 'size' => $size,
                 'type' => $type,
-                'name' => $name,
-                'ext' => $ext,
+                'original_name' => $name,
+                'resize_name' => $ext,
                 'image' => $images
             ];
 
@@ -44,6 +46,29 @@ class ImageController extends Controller
         else {
             return 'walaa';
         }
+
+//        $slug = str_slug($request->name);
+//        if($request->hasFile('images'))
+//        {
+//
+//            $currentDate = Carbon::now()->toDateString();
+//            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+//
+//            if(!Storage::disk('public')->exists('resort'))
+//            {
+//                Storage::disk('public')->makeDirectory('resort');
+//            }
+//            $resortImage = Images::make($image)->resize(1600,1066)->stream();
+//            Storage::disk('public')->put('resort/'.$imageName,$resortImage);
+//
+//        } else {
+//            $imageName = "default.png";
+//        }
+//        $img = new Image();
+//        $img->filename = $imageName;
+//        $img->type = $image->extension();
+//        $img->resort_id = $request->id;
+//        $img->save();
 //
 //        if (!empty($images)) {
 //            foreach ($images as $image) {
