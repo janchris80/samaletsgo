@@ -35,28 +35,38 @@ class ImageController extends Controller
 //        }
 //
         $image = $request->file('image');
-        $slug = str_slug($request->name);
-        if($request->hasFile('images'))
-        {
+        $data = [
+            'extension1' => $image->extension(),
+            'extension2' => $image->getExtension(),
+            'extension3' => $image->getClientOriginalExtension(),
+            'extension4' => $image->getClientMimeType(),
+            'extension5' => $image->getType(),
+            'image' => $image,
+        ];
 
-            $currentDate = Carbon::now()->toDateString();
-            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getExtension();
-
-            if(!Storage::disk('public')->exists('resort'))
-            {
-                Storage::disk('public')->makeDirectory('resort');
-            }
-            $resortImage = Images::make($image)->resize(1600,1066)->stream();
-            Storage::disk('public')->put('resort/'.$imageName,$resortImage);
-
-        } else {
-            $imageName = "default.png";
-        }
-        $img = new Image();
-        $img->filename = $imageName;
-        $img->type = $image->getExtension();
-        $img->resort_id = $request->id;
-        $img->save();
+        dd($data);die;
+//        $slug = str_slug($request->name);
+//        if($request->hasFile('images'))
+//        {
+//
+//            $currentDate = Carbon::now()->toDateString();
+//            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->extension();
+//
+//            if(!Storage::disk('public')->exists('resort'))
+//            {
+//                Storage::disk('public')->makeDirectory('resort');
+//            }
+//            $resortImage = Images::make($image)->resize(1600,1066)->stream();
+//            Storage::disk('public')->put('resort/'.$imageName,$resortImage);
+//
+//        } else {
+//            $imageName = "default.png";
+//        }
+//        $img = new Image();
+//        $img->filename = $imageName;
+//        $img->type = $image->extension();
+//        $img->resort_id = $request->id;
+//        $img->save();
 
 
 //
