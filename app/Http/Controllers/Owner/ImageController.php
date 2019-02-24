@@ -35,16 +35,8 @@ class ImageController extends Controller
 //        }
 //
         $image = $request->file('image');
-        $data = [
-            'extension1' => $image->extension(),
-            'extension2' => $image->getExtension(),
-            'extension3' => $image->getClientOriginalExtension(),
-            'extension4' => $image->getClientMimeType(),
-            'extension5' => $image->getType(),
-            'image' => $image,
-        ];
 
-        dd($data);die;
+        dd($image);die;
 //        $slug = str_slug($request->name);
 //        if($request->hasFile('images'))
 //        {
