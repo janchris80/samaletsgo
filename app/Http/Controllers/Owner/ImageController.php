@@ -85,7 +85,7 @@ class ImageController extends Controller
                 $img->resort_id = $id;
                 $img->original_name = $name;
                 $img->size = $size;
-                $img->file_location = 'storage/resort/'.$ext;
+                $img->file_location = 'http://178.128.124.60/storage/resort/'.$ext;
                 $img->save();
                 return response()->json([$ext]);
             }
