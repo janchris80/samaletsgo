@@ -38,7 +38,7 @@ class ImageController extends Controller
                 'image' => $images
             ];
 
-            return $data;
+            dd($data);
 
         }
         else {
