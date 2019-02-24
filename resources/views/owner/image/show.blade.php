@@ -89,14 +89,16 @@
                 removedfile: function(file)
                 {
                     let name = file.xhr.response;
-                    console.log(file.xhr);
+                    let regx = name.replace(/^[a-z0-9]+$/i,'');
+                    console.log('name: ', regx);
+                    console.log('xhr: ', file.xhr);
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                         },
                         type: 'POST',
                         url: '{{ route('owner.image.remove') }}',
-                        data: {filename: name},
+                        data: {filename: regx, '_method': 'DELETE'},
                         success: function (data){
                             console.log("File has been successfully removed!!", data);
                         },
