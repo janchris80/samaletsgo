@@ -40,7 +40,7 @@ class ImageController extends Controller
         {
 
             $currentDate = Carbon::now()->toDateString();
-            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getExtension();
 
             if(!Storage::disk('public')->exists('resort'))
             {
@@ -54,7 +54,7 @@ class ImageController extends Controller
         }
         $img = new Image();
         $img->filename = $imageName;
-        $img->type = $image->getClientOriginalExtension();
+        $img->type = $image->getType();
         $img->resort_id = $request->id;
         $img->save();
 
