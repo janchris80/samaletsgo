@@ -27,13 +27,13 @@ class ImageController extends Controller
         if ($request->hasFile('images')){
             $images = $request->file('images');
             $size = $images->getSize();
-            $type = $images->getType();
-            $path = $images->getPath();
-            $ext = $images->getExtension();
+            $type = $images->getClientMimeType();
+            $name = $images->getClientOriginalName();
+            $ext = $images->getClientOriginalExtension();
             $data = [
                 'size' => $size,
                 'type' => $type,
-                'path' => $path,
+                'name' => $name,
                 'ext' => $ext,
                 'image' => $images
             ];
