@@ -9,6 +9,7 @@ use App\Model\Entrance;
 use App\Model\Package;
 use App\Model\Resort;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -42,28 +43,12 @@ class ResortController extends Controller
     {
         $this->validate($request,[
             'name' => 'required',
-//            'images' => 'required',
+            'images' => 'required',
             'categories' => 'required',
             'address' => 'required',
             'description' => 'required',
         ]);
-//        $image = $request->file('image');
-//        if(isset($image))
-//        {
-//            $currentDate = '';
-//            $imageName  = $slug.'-'.$currentDate.'-'.uniqid().'.'.$image->getClientOriginalExtension();
-//
-//            if(!Storage::disk('public')->exists('post'))
-//            {
-//                Storage::disk('public')->makeDirectory('post');
-//            }
-//
-//            $resortImage = Image::make($image)->resize(1600,1066)->stream();
-//            Storage::disk('public')->put('post/'.$imageName,$resortImage);
-//
-//        } else {
-//            $imageName = "default.png";
-//        }
+
         $resort = new Resort();
         $resort->user_id = Auth::id();
         $resort->name = $request->name;
@@ -73,6 +58,28 @@ class ResortController extends Controller
         $resort->save();
 
         $resort->categories()->attach($request->categories);
+
+        $images = $request->file('image');
+
+        if(isset($images)) {
+            foreach ($images as $key => $datum) {
+                $currentDate = Carbon::now()->toDateString();
+                $imageName  = str_random(12).'-'.$currentDate.'-'.uniqid().'.'.$datum->getClientOriginalExtension();
+
+                if(!Storage::disk('public')->exists('resort'))
+                {
+                    Storage::disk('public')->makeDirectory('resort');
+                }
+
+                $resortImage = Image::make($datum)->resize(1600,1066)->stream();
+                Storage::disk('public')->put('resort/'.$imageName,$resortImage);
+
+                $image = new Image();
+                $image->resort_id = $resort->id;
+                $image->filename = $imageName;
+                $image->save();
+            }
+        }
 
         if($request->cottage_name) {
             foreach ($request->entrance_agetype as $key => $datum) {
@@ -128,73 +135,42 @@ class ResortController extends Controller
 
     public function show(Resort $resort)
     {
-        $categories = DB::select(
-            '
-            SELECT 
-              c.* 
-            FROM
-              category_resort cr 
-              LEFT JOIN resorts r 
-                ON r.`id` = cr.`resort_id` 
-              LEFT JOIN categories c 
-                ON c.`id` = cr.`category_id` 
-            WHERE r.`id` = '.$resort->id.'
-            AND r.`user_id` = '.Auth::id().'
-            ORDER BY cr.updated_at 
-        ');
+        $categories = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('category_resort','category_resort.resort_id','resorts.id')
+            ->leftJoin('categories','categories.id','category_resort.category_id')
+            ->get();
 
-        $entrances = DB::select(
-            '
-            SELECT 
-              e.* 
-            FROM
-              entrances e 
-              LEFT JOIN resorts r 
-                ON r.id = e.`resort_id` 
-            WHERE e.`resort_id` = '.$resort->id.'
-            AND r.`user_id` = '.Auth::id().'
-            ORDER BY e.`updated_at` 
-        ');
+        $entrances = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('entrances','entrances.resort_id','resorts.id')
+            ->get();
 
-        $cottages = DB::select(
-            '
-            SELECT 
-              c.* 
-            FROM
-              cottages c 
-              LEFT JOIN resorts r 
-                ON r.id = c.`resort_id` 
-            WHERE c.`resort_id` = '.$resort->id.'
-            AND r.`user_id` = '.Auth::id().'
-            ORDER BY c.`updated_at` 
-        ');
+        $cottages = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('cottages','cottages.resort_id','resorts.id')
+            ->get();
 
-        $packages = DB::select(
-            '
-            SELECT 
-              p.* 
-            FROM
-              packages p 
-              LEFT JOIN resorts r 
-                ON r.id = p.`resort_id` 
-            WHERE p.`resort_id` = '.$resort->id.'
-            AND r.`user_id` = '.Auth::id().'
-            ORDER BY p.`updated_at` 
-        ');
+        $packages = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('packages','packages.resort_id','resorts.id')
+            ->get();
 
-        $amenities = DB::select(
-            '
-            SELECT 
-              a.* 
-            FROM
-              amenities a 
-              LEFT JOIN resorts r 
-                ON r.id = a.`resort_id` 
-            WHERE a.`resort_id` = '.$resort->id.'
-            AND r.`user_id` = '.Auth::id().'
-            ORDER BY a.`updated_at` 
-        ');
+        $amenities = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('amenities','amenities.resort_id','resorts.id')
+            ->get();
 
+        $images = Resort::query()
+            ->where('resorts.id','=', $resort->id)
+            ->where('resorts.user_id','=', Auth::id())
+            ->leftJoin('images','images.resort_id','resorts.id')
+            ->get();
 
         return view('owner.resort.show',[
             'resort' => $resort,
@@ -203,6 +179,7 @@ class ResortController extends Controller
             'cottages' => $cottages,
             'packages' => $packages,
             'amenities' => $amenities,
+            'images' => $images,
         ]);
     }
 
