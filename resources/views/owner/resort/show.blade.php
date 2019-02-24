@@ -4,7 +4,7 @@
 
 @push('css')
     <!-- Light Gallery Plugin Css -->
-    <link href="../../plugins/light-gallery/css/lightgallery.css" rel="stylesheet">
+    <link href="{{ asset('assets/backend/plugins/light-gallery/css/lightgallery.min.css') }}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -208,7 +208,7 @@
     {{--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBEW_VqeFNPUDk5Lq0TlACjDFjPEOkct24&callback=initMap"--}}
             {{--type="text/javascript"></script>--}}
     <!-- Light Gallery Plugin Js -->
-    <script src="../../plugins/light-gallery/js/lightgallery-all.js"></script>
+    <script src="{{ asset('assets/backend/plugins/light-gallery/js/lightgallery-all.min.js') }}"></script>
 
     <script>
         $(function () {
