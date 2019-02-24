@@ -22,15 +22,28 @@ class ImageController extends Controller
 
     public function store(Request $request)
     {
-        dd($images = $request->file('images'));
-//        if ($request->hasFile('images')){
-//            $images = $request->file('images');
-//            $size = $images->getSize();
-//            return $size;
-//        }
-//        else {
-//            return 'walaa';
-//        }
+
+        $data = [];
+        if ($request->hasFile('images')){
+            $images = $request->file('images');
+            $size = $images->getSize();
+            $type = $images->getType();
+            $path = $images->getPath();
+            $ext = $images->getExtension();
+            $data = [
+                'size' => $size,
+                'type' => $type,
+                'path' => $path,
+                'ext' => $ext,
+                'image' => $images
+            ];
+
+            return $data;
+
+        }
+        else {
+            return 'walaa';
+        }
 //
 //        if (!empty($images)) {
 //            foreach ($images as $image) {
