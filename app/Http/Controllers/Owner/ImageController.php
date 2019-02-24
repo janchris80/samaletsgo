@@ -25,7 +25,7 @@ class ImageController extends Controller
         if ($request->hasFile('images')){
             $images = $request->file('images');
             $size = $images->getSize();
-            return $images;
+            dd($images);
         }
         else {
             return 'walaa';
