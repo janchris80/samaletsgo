@@ -80,7 +80,7 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="{{ Request::is('owner/resort*') ? 'active' : '' }}">
+                <li class="{{ Request::is('owner/resort*') || Request::is('owner/image*') ? 'active' : '' }}">
                     <a href="{{ route('owner.resort.index') }}">
                         <i class="material-icons">beach_access</i>
                         <span>Resorts</span>

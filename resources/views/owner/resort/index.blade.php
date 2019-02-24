@@ -62,6 +62,11 @@
                                                         </a>
                                                     </li>
                                                     <li>
+                                                        <a href="{{ route('owner.image.show', $datum->id) }}">
+                                                            <i class="material-icons">image</i>Add Image
+                                                        </a>
+                                                    </li>
+                                                    <li>
                                                         <a href="javascript:void(0)" onclick="deleteData({{ $datum->id }})">
                                                             <i class="material-icons">delete</i>Delete
                                                         </a>
