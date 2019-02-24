@@ -94,7 +94,7 @@ class ResortApiController extends Controller
             }
 
             foreach ($image as $key => $e) {
-                $images[$key] = $e->file_location;
+                $images[$key]['site'] = $e->file_location;
             }
 
 
