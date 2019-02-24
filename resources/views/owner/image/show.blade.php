@@ -88,10 +88,8 @@
                 timeout: 5000,
                 removedfile: function(file)
                 {
-                    let name = file.name;
-                    console.log(file.xhr.response);
-                    console.log(file.xhr.response.success);
-                    console.log(JSON.parse(file.xhr.response.success));
+                    let name = file.xhr.response;
+                    console.log(file.xhr);
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')

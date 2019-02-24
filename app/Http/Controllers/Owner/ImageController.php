@@ -55,15 +55,11 @@ class ImageController extends Controller
 
     public function fileDestroy(Request $request)
     {
-//        $filename =  $request->get('filename');
-//        Image::query()
-//            ->where('filename','=', $filename)
-//            ->delete();
-//        $path=public_path().'/images/'.$filename;
-//        if (file_exists($path)) {
-//            unlink($path);
-//        }
-//        return $filename;
+        $filename =  $request->get('filename');
+        Image::query()
+            ->where('filename','=', $filename)
+            ->delete();
+
         return response()->json([$request]);
     }
 
@@ -76,13 +72,6 @@ class ImageController extends Controller
             $type = $images->getClientMimeType();
             $name = $images->getClientOriginalName();
             $ext = $currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
-            $data = [
-                'size' => $size,
-                'type' => $type,
-                'original_name' => $name,
-                'resize_name' => $ext,
-                'image' => $images
-            ];
             if(!Storage::disk('public')->exists('resort'))
             {
                 Storage::disk('public')->makeDirectory('resort');
@@ -94,6 +83,8 @@ class ImageController extends Controller
                 $img = new Image();
                 $img->filename = $ext;
                 $img->resort_id = $id;
+                $img->original_name = $name;
+                $img->size = $size;
                 $img->file_location = 'storage/resort/'.$ext;
                 $img->save();
                 return response()->json([$ext]);
