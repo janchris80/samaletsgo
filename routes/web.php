@@ -34,5 +34,6 @@ Route::group(['as' => 'owner.', 'prefix' => 'owner', 'namespace' => 'Owner', 'mi
     Route::resource('resort', 'ResortController');
     Route::resource('image', 'ImageController');
     Route::post('image/delete','ImageController@fileDestroy');
+    Route::post('image/upload/{image}','ImageController@upload')->name('image.upload');
     Route::resource('profile', 'ProfileController');
 });

@@ -37,8 +37,9 @@
                     <div class="body">
 
 
-                        <form method="post" action="{{ route('owner.image.update', $resort['id']) }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+                        <form method="post" action="{{ route('owner.image.upload', $resort['id']) }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                             @csrf
+                            <input hidden name="id" value="{{ $resort['id'] }}">
                             <div class="dz-message">
                                 <div class="drag-icon-cph">
                                     <i class="material-icons">touch_app</i>
@@ -48,7 +49,6 @@
                             </div>
                             <div class="fallback">
                                 <input name="file" type="file" multiple />
-                                <input hidden name="id" value="{{ $resort['id'] }}">
                             </div>
                         </form>
 

@@ -120,7 +120,27 @@ class ImageController extends Controller
 
     public function update(Request $request, $id)
     {
-        $data = [];
+
+    }
+
+    public function destroy($id)
+    {
+        //
+    }
+
+    public function fileDestroy(Request $request)
+    {
+        $filename =  $request->get('filename');
+        Image::where('filename',$filename)->delete();
+        $path=public_path().'/images/'.$filename;
+        if (file_exists($path)) {
+            unlink($path);
+        }
+        return $filename;
+    }
+
+    public function upload(Request $request, $id)
+    {
         if ($request->hasFile('file')){
             $currentDate = Carbon::now()->toDateString();
             $images = $request->file('file');
@@ -157,21 +177,5 @@ class ImageController extends Controller
         else {
             return response()->json(['error'=> 'somethings wrong or null file']);
         }
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function fileDestroy(Request $request)
-    {
-        $filename =  $request->get('filename');
-        Image::where('filename',$filename)->delete();
-        $path=public_path().'/images/'.$filename;
-        if (file_exists($path)) {
-            unlink($path);
-        }
-        return $filename;
     }
 }
