@@ -53,7 +53,7 @@ class ImageController extends Controller
         //
     }
 
-    public function fileDestroy(Request $request, $name)
+    public function fileDestroy(Request $request)
     {
 //        $filename =  $request->get('filename');
 //        Image::query()
