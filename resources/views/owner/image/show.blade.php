@@ -90,13 +90,14 @@
                 {
                     let name = file.name;
                     console.log(file.xhr.response);
+                    console.log(file.xhr.response.success);
                     console.log(JSON.parse(file.xhr.response.success));
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{ url('image/remove') }}',
+                        url: '{{ route('owner.image.remove') }}',
                         data: {filename: name},
                         success: function (data){
                             console.log("File has been successfully removed!!", data);

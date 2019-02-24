@@ -94,9 +94,9 @@ class ImageController extends Controller
                 $img = new Image();
                 $img->filename = $ext;
                 $img->resort_id = $id;
-                $img->file_location = $path;
+                $img->file_location = 'storage/resort/'.$ext;
                 $img->save();
-                return response()->json(['success'=> $ext]);
+                return response()->json([$ext]);
             }
             else {
                 return response()->json(['error'=> 'somethings wrong inside path']);
