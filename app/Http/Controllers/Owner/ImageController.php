@@ -7,6 +7,8 @@ use App\Model\Resort;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image as Images;
 
 class ImageController extends Controller
 {
@@ -25,9 +27,9 @@ class ImageController extends Controller
     {
 
         $data = [];
-        if ($request->hasFile('images')){
+        if ($request->hasFile('file')){
             $currentDate = Carbon::now()->toDateString();
-            $images = $request->file('images');
+            $images = $request->file('file');
             $size = $images->getSize();
             $type = $images->getClientMimeType();
             $name = $images->getClientOriginalName();
@@ -39,8 +41,14 @@ class ImageController extends Controller
                 'resize_name' => $ext,
                 'image' => $images
             ];
+            if(!Storage::disk('public')->exists('resort'))
+            {
+                Storage::disk('public')->makeDirectory('resort');
+            }
+            $resortImage = Images::make($images)->resize(1600,1066)->stream();
+            Storage::disk('public')->put('resort/'.$ext,$resortImage);
 
-            dd($data);
+            echo 'success';
 
         }
         else {
