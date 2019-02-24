@@ -89,7 +89,8 @@
                 removedfile: function(file)
                 {
                     let name = file.name;
-                    console.log(file);
+                    console.log(file.xhr.response);
+                    console.log(file.xhr.response.success);
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
