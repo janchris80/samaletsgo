@@ -37,7 +37,7 @@
                     <div class="body">
 
 
-                        <form method="post" action="{{ route('owner.image.store') }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
+                        <form method="post" action="{{ route('owner.image.update', $resort['id']) }}" enctype="multipart/form-data" class="dropzone" id="dropzone">
                             @csrf
                             <div class="dz-message">
                                 <div class="drag-icon-cph">
@@ -97,7 +97,7 @@
                         url: '{{ url("image/delete") }}',
                         data: {filename: name},
                         success: function (data){
-                            console.log("File has been successfully removed!!");
+                            console.log("File has been successfully removed!!", data);
                         },
                         error: function(e) {
                             console.log(e);

@@ -23,7 +23,7 @@ class ImageController extends Controller
         //
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
 
         $data = [];
@@ -48,15 +48,20 @@ class ImageController extends Controller
             $resortImage = Images::make($images)->resize(1600,1066)->stream();
             $path = Storage::disk('public')->put('resort/'.$ext,$resortImage);
 
-            $img = new Image();
-            $img->filename = $ext;
-            $img->file_location = $path;
-            $img->resort_id = $request->id;
-            $img->save();
-            return response()->json(['success'=> $ext]);
+            if ($path) {
+                $img = new Image();
+                $img->filename = $ext;
+                $img->resort_id = $id;
+                $img->file_location = $path;
+                $img->save();
+                return response()->json(['success'=> $ext]);
+            }
+            else {
+                return response()->json(['error'=> 'somethings wrong inside path']);
+            }
         }
         else {
-            return response()->json(['error'=> 'somethings wrong']);
+            return response()->json(['error'=> 'somethings wrong or null file']);
         }
 
 //        $slug = str_slug($request->name);
@@ -115,7 +120,43 @@ class ImageController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $data = [];
+        if ($request->hasFile('file')){
+            $currentDate = Carbon::now()->toDateString();
+            $images = $request->file('file');
+            $size = $images->getSize();
+            $type = $images->getClientMimeType();
+            $name = $images->getClientOriginalName();
+            $ext = $currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
+            $data = [
+                'size' => $size,
+                'type' => $type,
+                'original_name' => $name,
+                'resize_name' => $ext,
+                'image' => $images
+            ];
+            if(!Storage::disk('public')->exists('resort'))
+            {
+                Storage::disk('public')->makeDirectory('resort');
+            }
+            $resortImage = Images::make($images)->resize(1600,1066)->stream();
+            $path = Storage::disk('public')->put('resort/'.$ext,$resortImage);
+
+            if ($path) {
+                $img = new Image();
+                $img->filename = $ext;
+                $img->resort_id = $id;
+                $img->file_location = $path;
+                $img->save();
+                return response()->json(['success'=> $ext]);
+            }
+            else {
+                return response()->json(['error'=> 'somethings wrong inside path']);
+            }
+        }
+        else {
+            return response()->json(['error'=> 'somethings wrong or null file']);
+        }
     }
 
     public function destroy($id)
