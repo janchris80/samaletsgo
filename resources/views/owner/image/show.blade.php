@@ -88,13 +88,13 @@
                 timeout: 5000,
                 removedfile: function(file)
                 {
-                    let name = file.upload.filename;
+                    let name = file.name;
                     $.ajax({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                         },
                         type: 'POST',
-                        url: '{{ url("image/delete") }}',
+                        url: '{{ url('image/remove') }}',
                         data: {filename: name},
                         success: function (data){
                             console.log("File has been successfully removed!!", data);

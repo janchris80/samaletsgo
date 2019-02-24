@@ -33,7 +33,7 @@ Route::group(['as' => 'owner.', 'prefix' => 'owner', 'namespace' => 'Owner', 'mi
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('resort', 'ResortController');
     Route::resource('image', 'ImageController');
-    Route::post('image/delete','ImageController@fileDestroy');
+    Route::post('image/remove/{image}','ImageController@fileDestroy')->name('image.remove');
     Route::post('image/upload/{image}','ImageController@upload')->name('image.upload');
     Route::resource('profile', 'ProfileController');
 });
