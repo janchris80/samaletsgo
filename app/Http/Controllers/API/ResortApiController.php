@@ -59,7 +59,6 @@ class ResortApiController extends Controller
             $entrances = [];
             $cottages = [];
             $amenities = [];
-            $images = [];
 
             foreach ($category as $key => $c) {
                 $categories[$key]['name'] = $c->name;
@@ -92,11 +91,6 @@ class ResortApiController extends Controller
                 $amenities[$key]['description'] = $e->description;
                 $amenities[$key]['rate'] = $e->rate;
             }
-
-            foreach ($image as $key => $e) {
-                $images[$key]['site'] = $e->file_location;
-            }
-
 
             $result = [
                 'id' => $resort->id,
