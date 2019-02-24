@@ -54,7 +54,7 @@ class ImageController extends Controller
         }
         $img = new Image();
         $img->filename = $imageName;
-        $img->type = $image->getType();
+        $img->type = $image->getExtension();
         $img->resort_id = $request->id;
         $img->save();
 
