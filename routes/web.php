@@ -32,5 +32,6 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin', 'namespace' => 'Admin', 'mi
 Route::group(['as' => 'owner.', 'prefix' => 'owner', 'namespace' => 'Owner', 'middleware' => ['auth', 'owner']], function () {
     Route::get('dashboard', 'DashboardController@index')->name('dashboard');
     Route::resource('resort', 'ResortController');
+    Route::resource('image', 'ImageController');
     Route::resource('profile', 'ProfileController');
 });

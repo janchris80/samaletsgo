@@ -51,19 +51,20 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-
-            <!--AMENITY-->
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="card">
-                    <div class="header">
-                        <h2 class="text-capitalize">
-                            Amenity and Rate
-                        </h2>
-                    </div>
-                    <div class="body">
-                        <ul>
-                            @if (count($amenities))
+        <!--AMENITY-->
+        @if(count($amenities))
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2 class="text-capitalize">
+                                Amenity and Rate
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <ul>
                                 @foreach ($amenities as $amenity)
                                     <li>
                                         {!! $amenity->name !!}
@@ -77,25 +78,25 @@
                                         @endif
                                     </ul>
                                 @endforeach
-                            @else
-                                <h4><i>No Amenity</i></h4>
-                            @endif
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+        @endif
 
-            <!--ENTRANCE-->
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="card">
-                    <div class="header">
-                        <h2 class="text-capitalize">
-                            Entrance
-                        </h2>
-                    </div>
-                    <div class="body">
-                        <ul>
-                            @if (count($entrances))
+    <!--ENTRANCE-->
+        @if (count($entrances))
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2 class="text-capitalize">
+                                Entrance
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <ul>
                                 @foreach ($entrances as $entrance)
                                     <li>
                                         {!! $entrance->agetype !!} ({!! $entrance->tour !!})
@@ -112,25 +113,25 @@
                                         @endif
                                     </ul>
                                 @endforeach
-                            @else
-                                <h4><i>No Entrance</i></h4>
-                            @endif
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+        @endif
 
-            <!--COTTAGE-->
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="card">
-                    <div class="header">
-                        <h2 class="text-capitalize">
-                            Cottage
-                        </h2>
-                    </div>
-                    <div class="body">
-                        <ul>
-                            @if (count($cottages))
+    <!--COTTAGE-->
+        @if (count($cottages))
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2 class="text-capitalize">
+                                Cottage
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <ul>
                                 @foreach ($cottages as $cottage)
                                     <li>
                                         {!! $cottage->name !!}
@@ -147,25 +148,25 @@
                                         @endif
                                     </ul>
                                 @endforeach
-                            @else
-                                <h4><i>No Cottage</i></h4>
-                            @endif
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
+        @endif
 
-            <!--PACKAGE-->
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-                <div class="card">
-                    <div class="header">
-                        <h2 class="text-capitalize">
-                            Package
-                        </h2>
-                    </div>
-                    <div class="body">
-                        <ul>
-                            @if (count($packages))
+    <!--PACKAGE-->
+        @if (count($packages))
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                    <div class="card">
+                        <div class="header">
+                            <h2 class="text-capitalize">
+                                Package
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <ul>
                                 @foreach ($packages as $package)
                                     <li>
                                         {!! $package->name !!}
@@ -182,15 +183,12 @@
                                         @endif
                                     </ul>
                                 @endforeach
-                            @else
-                                <h4><i>No Package</i></h4>
-                            @endif
-                        </ul>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-
-        </div>
+        @endif
     </div>
 @stop
 
