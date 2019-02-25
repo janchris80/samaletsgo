@@ -234,6 +234,32 @@ class ResortController extends Controller
 
         $resort->categories()->sync($request->categories);
 
+        $images = $request->file('file');
+
+        if($request->hasFile('file')) {
+            $currentDate = Carbon::now()->toDateString();
+            $size = $images->getSize();
+            $name = $images->getClientOriginalName();
+            $resize_name = str_slug($resort->name).'-'.$currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
+            if(!Storage::disk('public')->exists('resort'))
+            {
+                Storage::disk('public')->makeDirectory('resort');
+            }
+            $resortImage = Images::make($images)->resize(1600,1066)->stream();
+            $path = Storage::disk('public')->put('resort/'.$resize_name, $resortImage);
+
+            if ($path) {
+                $img = new Image();
+                $img->filename = $resize_name;
+                $img->resort_id = $resort->id;
+                $img->original_name = $name;
+                $img->is_frontpage = 1;
+                $img->size = $size;
+                $img->file_location = 'http://178.128.124.60/storage/resort/'.$resize_name;
+                $img->save();
+            }
+        }
+
         if($request->entrance_agetype) {
             if($valid) {
                 Entrance::query()
