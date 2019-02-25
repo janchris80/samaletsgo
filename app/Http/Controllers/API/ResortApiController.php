@@ -17,7 +17,7 @@ class ResortApiController extends Controller
         $data = [];
         $resorts = Resort::query()
             ->where('is_approve','=',1)
-            ->latest()
+            ->latest('updated_at')
             ->get();
         foreach ($resorts as $resort) {
             $category = DB::table('category_resort')
@@ -104,9 +104,6 @@ class ResortApiController extends Controller
                 $amenities[$key]['rate'] = $e->rate;
             }
 
-//            foreach ($like as $key => $e) {
-//                $likes[$key] = $e->resort_id;
-//            }
 
             $result = [
                 'id' => $resort->id,
@@ -471,33 +468,24 @@ class ResortApiController extends Controller
 
     public function trending()
     {
-        $likes = [];
-        $getResort = DB::table('resorts')
+        $result = [];
+        $resorts = Resort::query()
             ->where('is_approve','=',1)
-            ->where('deleted_at','=', NULL)
             ->latest('updated_at')
             ->get();
 
-        foreach ($getResort as $resort) {
+        foreach ($resorts as $resort) {
             $res = DB::table('likes')
                 ->where('resort_id','=', $resort->id)
                 ->count();
-            array_push($likes, $res);
+
+            $data = [
+                'resort' => $resort->name,
+                'likes' => $res
+            ];
+            array_push($result, $data);
         }
-
-        $resorts = DB::table('likes')
-            ->leftJoin('resorts','resorts.id','=','likes.resort_id')
-            ->where('resorts.is_approve','=',1)
-            ->where('resorts.deleted_by','=',NULL)
-            ->groupBy('resorts.id')
-            ->get();
-
-        $data = [
-            'resort' => $resorts,
-            'likes' => $likes
-        ];
-
-        return $data;
+        return $result;
     }
 
     public function addLike(Request $request)
