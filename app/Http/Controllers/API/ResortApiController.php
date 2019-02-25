@@ -269,6 +269,8 @@ class ResortApiController extends Controller
         $appendTour = "";
         $appendAgetype = "";
         $totalEntrance = 0;
+        $totalKid = 0;
+        $totalAdult = 0;
         $minCottage = 0;
         $total = 0;
         $result = 0;
@@ -292,7 +294,7 @@ class ResortApiController extends Controller
                                     ON resorts.id = category_resort.resort_id
                                     LEFT JOIN categories
                                     ON categories.id = category_resort.category_id
-                                    $appendTour 
+                                    $appendTour
                                     AND resorts.is_approve = 1
                                     AND resorts.deleted_at IS NULL
                                     GROUP BY resorts.name  ");
@@ -303,12 +305,16 @@ class ResortApiController extends Controller
             $selectResortEntrance = DB::select("SELECT * FROM entrances $appendAgetype AND resort_id  = $id");
 
             foreach ($selectResortEntrance as $entrance) {
+
                 if ($entrance->agetype == 'Kid'){
+                    return 'kid';
                     $totalEntrance = $totalEntrance + ($entrance->rate *$request->kid);
                 }else if ($entrance->agetype == 'Adult'){
+                    return 'adult';
                     $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult);
                 }else{
-                    $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult) + ($entrance->rate *$request->kid);
+                    return 'all';
+                    $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult);
                 }
 
             }
@@ -340,11 +346,30 @@ class ResortApiController extends Controller
             $result = 0;
 
         }
+        $finalSelected = DB::table('resorts')->whereIn('id', $selectedResort)->get();
+//        die;
+
+//        $resort = DB::table('resorts')
+//            ->where('categories.name','=', $request->category)
+//            ->where('resorts.deleted_at','=', NULL)
+//            ->where('resorts.is_approve','=', 1)
+//            ->join('category_resort','category_resort.resort_id','=','resorts.id')
+//            ->join('categories','categories.id','=','category_resort.category_id')
+//            ->select(
+//                'resorts.id as resort_id',
+//                'resorts.is_approve as resort_approve',
+//                'resorts.name as resort_name',
+//                'resorts.address as resort_address',
+//                'resorts.description as resort_description',
+//                'categories.id as category_id',
+//                'categories.name as category_name'
+//            )
+//            ->get();
+
+
+
         // array that will hold search result and resort data
         $data = [];
-
-        $finalSelected = DB::table('resorts')->whereIn('id', $selectedResort)->get();
-
         foreach ($finalSelected as $index => $resort) {
             $category = DB::table('category_resort')
                 ->where('category_resort.resort_id','=', $resort->id)
