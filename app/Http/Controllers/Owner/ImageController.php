@@ -66,28 +66,30 @@ class ImageController extends Controller
     public function upload(Request $request, $id)
     {
         if ($request->hasFile('file')){
+            $resort = Resort::query()
+                ->find($id);
+
             $currentDate = Carbon::now()->toDateString();
             $images = $request->file('file');
             $size = $images->getSize();
-            $type = $images->getClientMimeType();
             $name = $images->getClientOriginalName();
-            $ext = $currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
+            $resize_name = str_slug($resort->name).'-'.$currentDate.'-'.uniqid().'.'.$images->getClientOriginalExtension();
             if(!Storage::disk('public')->exists('resort'))
             {
                 Storage::disk('public')->makeDirectory('resort');
             }
             $resortImage = Images::make($images)->resize(1600,1066)->stream();
-            $path = Storage::disk('public')->put('resort/'.$ext,$resortImage);
+            $path = Storage::disk('public')->put('resort/'.$resize_name,$resortImage);
 
             if ($path) {
                 $img = new Image();
-                $img->filename = $ext;
+                $img->filename = $resize_name;
                 $img->resort_id = $id;
                 $img->original_name = $name;
                 $img->size = $size;
-                $img->file_location = 'http://178.128.124.60/storage/resort/'.$ext;
+                $img->file_location = 'http://178.128.124.60/storage/resort/'.$resize_name;
                 $img->save();
-                return response()->json([$ext]);
+                return response()->json([$resize_name]);
             }
             else {
                 return response()->json(['error'=> 'somethings wrong inside path']);
