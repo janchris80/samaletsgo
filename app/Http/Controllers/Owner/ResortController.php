@@ -43,7 +43,6 @@ class ResortController extends Controller
     {
         $this->validate($request,[
             'name' => 'required',
-            'images' => 'required',
             'categories' => 'required',
             'address' => 'required',
             'description' => 'required',
