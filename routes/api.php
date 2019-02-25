@@ -23,9 +23,11 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('details', 'API\UserController@details');
 });
 
-Route::get('resort', 'API\ResortApiController@index');
+Route::post('resort', 'API\ResortApiController@index');
 Route::get('resort/trending', 'API\ResortApiController@trending');
 Route::post('resort/like', 'API\ResortApiController@like');
+Route::post('resort/add-like', 'API\ResortApiController@addLike');
+Route::post('resort/remove-like', 'API\ResortApiController@removeLike');
 Route::post('resort/package', 'API\ResortApiController@package');
 Route::post('resort/custom', 'API\ResortApiController@custom');
 Route::resource('event', 'API\EventApiController');
