@@ -293,7 +293,7 @@ class ResortApiController extends Controller
                                     LEFT JOIN categories
                                     ON categories.id = category_resort.category_id
                                     $appendTour 
-                                    WHERE resorts.is_approve = 1
+                                    AND resorts.is_approve = 1
                                     AND resorts.deleted_at IS NULL
                                     GROUP BY resorts.name  ");
 
