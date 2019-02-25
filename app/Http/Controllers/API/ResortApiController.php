@@ -308,7 +308,7 @@ class ResortApiController extends Controller
                 }else if ($entrance->agetype == 'Adult'){
                     $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult);
                 }else{
-                    $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult);
+                    $totalEntrance = $totalEntrance + ($entrance->rate *$request->adult) + ($entrance->rate *$request->kid);
                 }
 
             }
