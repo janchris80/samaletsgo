@@ -59,6 +59,11 @@ class ResortApiController extends Controller
                 ->leftJoin('likes','likes.resort_id','resorts.id')
                 ->get();
 
+            $like_count = Resort::query()
+                ->where('resorts.id','=', $resort->id)
+                ->leftJoin('likes','likes.resort_id','resorts.id')
+                ->count();
+
             $categories = [];
             $packages = [];
             $entrances = [];
@@ -113,7 +118,8 @@ class ResortApiController extends Controller
                 'cottage' => $cottages,
                 'amenity' => $amenities,
                 'image' => $image,
-                'like' => $likes
+                'like' => $likes,
+                'like_count' => $like_count,
             ];
 
             array_push($data, $result);
