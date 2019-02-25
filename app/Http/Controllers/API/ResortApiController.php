@@ -136,6 +136,8 @@ class ResortApiController extends Controller
 
     public function package(Request $request)
     {
+        $data = [];
+
         $sql = DB::table('resorts')
             ->where('categories.name','=', $request->category)
             ->where('packages.rate','<=', $request->budget)
@@ -436,12 +438,12 @@ class ResortApiController extends Controller
             array_push($data, $result);
         }
 
-        $results = [
+        $test = [
             'data' => $data,
             'result' => $finalSelected
         ];
 
-        return $results;
+        return $test;
 
     }
 
