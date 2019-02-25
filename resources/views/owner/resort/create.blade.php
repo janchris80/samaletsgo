@@ -339,5 +339,37 @@
         function removePackageRow(id) {
             $('#packageTable'+id).remove();
         }
+
+        $(function () {
+            $('#resort_form').validate({
+                rules: {
+                    'name': {
+                        required: true
+                    },
+                    'file': {
+                        required: true
+                    },
+                    'description': {
+                        required: true
+                    },
+                    'address': {
+                        required: true
+                    },
+                    'categories[]': {
+                        required: true
+                    },
+                },
+                highlight: function (input) {
+                    // console.log(input);
+                    $(input).parents('.form-line').addClass('error');
+                },
+                unhighlight: function (input) {
+                    $(input).parents('.form-line').removeClass('error');
+                },
+                errorPlacement: function (error, element) {
+                    $(element).parents('.input-group').append(error);
+                }
+            });
+        });
     </script>
 @endpush

@@ -44,7 +44,6 @@ class ResortController extends Controller
     {
         $this->validate($request,[
             'name' => 'required',
-            'file' => 'required|mime:JPG,PNG,GIF,JPEG',
             'categories' => 'required',
             'address' => 'required',
             'description' => 'required',
@@ -62,7 +61,7 @@ class ResortController extends Controller
 
         $images = $request->file('file');
 
-        if(isset($images)) {
+        if($request->hasFile('file')) {
             $currentDate = Carbon::now()->toDateString();
             $size = $images->getSize();
             $name = $images->getClientOriginalName();
