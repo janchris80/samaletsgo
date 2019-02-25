@@ -80,7 +80,7 @@ class ResortController extends Controller
             }
         }
 
-        if($request->cottage_name) {
+        if($request->entrance_agetype) {
             foreach ($request->entrance_agetype as $key => $datum) {
                 $entrance = new Entrance();
                 $entrance->resort_id = $resort->id;
