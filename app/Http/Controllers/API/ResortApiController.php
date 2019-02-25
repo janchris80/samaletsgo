@@ -267,17 +267,23 @@ class ResortApiController extends Controller
 
     public function custom(Request $request)
     {
-        $total_person = $request->kid + $request->adult;
+        $kids = $request->kid;
+        $adult = $request->adult;
+        $budget = $request->budget;
+        $day = $request->day;
+        $night = $request->night;
+        $category = $request->category;
+
         $tour = "";
         $selected_resort = array();
 
         // set tour if daytour or overnight or both
-        if($request->day && $request->night)
-            $tour = "AND (tour LIKE '%Daytour%' OR tour LIKE '%Overnight%')";
-        if($request->day && !$request->night)
-            $tour = "AND tour LIKE '%Daytour%'";
-        if(!$request->day && $request->night)
-            $tour = "AND tour LIKE '%Overnight%'";
+        if($day && $night)
+            $tour = "AND (entrances.tour LIKE '%Daytour%' OR entrances.tour LIKE '%Overnight%')";
+        if($day && !$night)
+            $tour = "AND entrances.tour LIKE '%Daytour%'";
+        if(!$day && $night)
+            $tour = "AND entrances.tour LIKE '%Overnight%'";
 
         // get resort id by category query
         $resorts = DB::select("
@@ -285,26 +291,31 @@ class ResortApiController extends Controller
               *,
               resorts.id AS resort_id 
             FROM
-              resorts 
-              LEFT JOIN entrances 
-                ON entrances.resort_id = resorts.id 
-              LEFT JOIN category_resort 
-                ON resorts.id = category_resort.resort_id 
-              LEFT JOIN categories 
-                ON categories.id = category_resort.category_id $tour 
+              resorts
+              LEFT JOIN category_resort
+                ON category_resort.resort_id = resorts.id
+              LEFT JOIN categories
+                ON category_resort.category_id = categories.id
+              LEFT JOIN entrances
+                ON entrances.resort_id = resorts.id
+                WHERE categories.name = '$category'
+                $tour
                 AND resorts.is_approve = 1 
                 AND resorts.deleted_at IS NULL 
             GROUP BY resorts.name 
         ");
 
-        // loop thru resort to get budget
+        // loop thru resort id to get budget
         foreach ($resorts as $resort) {
-            $total_amount = 0;
+            $total_amount = 0; 
+            $result = 0;
+
             $resort_id = $resort->resort_id;
 
             $resort_adult_rate = DB::select("
                 SELECT 
-                  MIN(rate) AS rate
+                  min(rate) AS rate,
+                  resort_id
                 FROM
                   entrances 
                 WHERE agetype = 'Adult' 
@@ -314,7 +325,8 @@ class ResortApiController extends Controller
 
             $resort_kid_rate = DB::select("
                 SELECT 
-                  MIN(rate) AS rate
+                  MIN(rate) AS rate,
+                  resort_id
                 FROM
                   entrances 
                 WHERE agetype = 'Kid' 
@@ -323,14 +335,14 @@ class ResortApiController extends Controller
             ");
 
             if (!is_null($resort_adult_rate[0]->rate)) {
-                $total_amount = $total_amount + ($resort_adult_rate[0]->rate * $request->adult);
+                $total_amount = $total_amount + ($resort_adult_rate[0]->rate * $adult);
             }
 
             if (!is_null($resort_kid_rate[0]->rate)) {
-                $total_amount = $total_amount + ($resort_kid_rate[0]->rate * $request->kid);
+                $total_amount = $total_amount + ($resort_adult_rate[0]->rate * $kids);
             }
 
-            $cottage_rate = DB::select("
+             $cottage_rate = DB::select("
                 SELECT 
                   MIN(rate) AS rate
                 FROM
@@ -342,15 +354,18 @@ class ResortApiController extends Controller
                 $total_amount = $total_amount + $cottage_rate[0]->rate;
             }
 
-            $result_budget = $request->budget - $total_amount;
-
-            if ($result_budget >= 0 && $result_budget <= $request->budget && $total_amount > 0) {
+             $result = $budget - $total_amount;
+             if ($result >= 0 && $result <= $budget && $total_amount > 0) {
                 array_push($selected_resort, $resort->resort_id);
-            };
+            }
+            
+
         }
+
+        // select resort based on category with budget
         $selected_resort = DB::table('resorts')->whereIn('id', $selected_resort)->get();
 
-        // array that will hold search result and resort data
+        // array that will hold search result of resort
         $data = [];
         foreach ($selected_resort as $index => $resort) {
             $category = DB::table('category_resort')
