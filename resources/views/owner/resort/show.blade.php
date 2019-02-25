@@ -53,9 +53,11 @@
                         <div class="body">
                             <ul>
                                 @foreach ($amenities as $amenity)
-                                    <li>
-                                        {!! $amenity->name !!}
-                                    </li>
+                                    @if ($amenity->name)
+                                        <li>
+                                            {{ $amenity->name }}
+                                        </li>
+                                    @endif
                                     <ul>
                                         @if ($amenity->description)
                                             <li>{!! $amenity->description !!}</li>
@@ -85,9 +87,11 @@
                         <div class="body">
                             <ul>
                                 @foreach ($entrances as $entrance)
-                                    <li>
-                                        {!! $entrance->agetype !!} ({!! $entrance->tour !!})
-                                    </li>
+                                    @if ($entrance->agetype)
+                                        <li>
+                                            {{ $entrance->agetype }} ({{ $entrance->tour }})
+                                        </li>
+                                    @endif
                                     <ul>
                                         @if ($entrance->rate)
                                             <li>P{!! $entrance->rate !!}</li>
@@ -120,9 +124,11 @@
                         <div class="body">
                             <ul>
                                 @foreach ($cottages as $cottage)
-                                    <li>
-                                        {!! $cottage->name !!}
-                                    </li>
+                                    @if ($cottage->name)
+                                        <li>
+                                            {{ $cottage->name }}
+                                        </li>
+                                    @endif
                                     <ul>
                                         @if ($cottage->description)
                                             <li>{!! $cottage->description !!}</li>
@@ -155,9 +161,11 @@
                         <div class="body">
                             <ul>
                                 @foreach ($packages as $package)
-                                    <li>
-                                        {!! $package->name !!}
-                                    </li>
+                                    @if ($package->name)
+                                        <li>
+                                            {{ $package->name }}
+                                        </li>
+                                    @endif
                                     <ul>
                                         @if ($package->description)
                                             <li>{!! $package->description !!}</li>

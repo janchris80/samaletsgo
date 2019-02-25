@@ -26,69 +26,30 @@ class ResortController extends Controller
 
     public function show(Resort $resort)
     {
-        $categories = DB::select(
-            '
-            SELECT 
-              c.* 
-            FROM
-              category_resort cr 
-              LEFT JOIN resorts r 
-                ON r.`id` = cr.`resort_id` 
-              LEFT JOIN categories c 
-                ON c.`id` = cr.`category_id` 
-            WHERE r.`id` = '.$resort->id.'
-            ORDER BY cr.updated_at 
-        ');
+        $categories = DB::table('category_resort')
+            ->where('category_resort.resort_id','=', $resort->id)
+            ->leftJoin('categories','categories.id','category_resort.category_id')
+            ->get();
 
-        $entrances = DB::select(
-            '
-            SELECT 
-              e.* 
-            FROM
-              entrances e 
-              LEFT JOIN resorts r 
-                ON r.id = e.`resort_id` 
-            WHERE e.`resort_id` = '.$resort->id.'
-            ORDER BY e.`updated_at` 
-        ');
+        $entrances = DB::table('entrances')
+            ->where('resort_id','=', $resort->id)
+            ->get();
 
-        $cottages = DB::select(
-            '
-            SELECT 
-              c.* 
-            FROM
-              cottages c 
-              LEFT JOIN resorts r 
-                ON r.id = c.`resort_id` 
-            WHERE c.`resort_id` = '.$resort->id.'
-            ORDER BY c.`updated_at` 
-        ');
+        $cottages = DB::table('cottages')
+            ->where('resort_id','=', $resort->id)
+            ->get();
 
-        $packages = DB::select(
-            '
-            SELECT 
-              p.* 
-            FROM
-              packages p 
-              LEFT JOIN resorts r 
-                ON r.id = p.`resort_id` 
-            WHERE p.`resort_id` = '.$resort->id.'
-            ORDER BY p.`updated_at` 
-        ');
+        $packages = DB::table('packages')
+            ->where('resort_id','=', $resort->id)
+            ->get();
 
-        $amenities = DB::select(
-            '
-            SELECT 
-              a.* 
-            FROM
-              amenities a 
-              LEFT JOIN resorts r 
-                ON r.id = a.`resort_id` 
-            WHERE a.`resort_id` = '.$resort->id.'
-            ORDER BY a.`updated_at` 
-        ');
+        $amenities = DB::table('amenities')
+            ->where('resort_id','=', $resort->id)
+            ->get();
 
-
+        $images = DB::table('images')
+            ->where('resort_id','=', $resort->id)
+            ->get();
 
         return view('admin.resort.show',[
             'resort' => $resort,
@@ -96,7 +57,8 @@ class ResortController extends Controller
             'entrances' => $entrances,
             'cottages' => $cottages,
             'packages' => $packages,
-            'amenities' => $amenities
+            'amenities' => $amenities,
+            'images' => $images,
         ]);
     }
 

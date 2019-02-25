@@ -20,12 +20,10 @@ class ResortApiController extends Controller
             ->latest()
             ->get();
         foreach ($resorts as $resort) {
-            $category = Resort::query()
-                ->where('resorts.id','=', $resort->id)
-                ->leftJoin('category_resort','category_resort.resort_id','=','resorts.id')
-                ->leftJoin('categories','categories.id','=','category_resort.category_id')
+            $category = DB::table('category_resort')
+                ->where('category_resort.resort_id','=', $resort->id)
+                ->join('categories','categories.id','=','category_resort.category_id')
                 ->get();
-
 
             $package = DB::table('packages')
                 ->where('resort_id','=', $resort->id)
@@ -45,12 +43,12 @@ class ResortApiController extends Controller
 
             $image = DB::table('images')
                 ->where('resort_id','=', $resort->id)
-                ->where('is_frontpage','=', 0)
                 ->get();
 
             $frontpage = DB::table('images')
                 ->where('resort_id','=', $resort->id)
                 ->where('is_frontpage','=', 1)
+                ->latest('updated_at')
                 ->first();
 
             $like = DB::table('likes')
@@ -138,89 +136,62 @@ class ResortApiController extends Controller
 
     public function package(Request $request)
     {
-        $cat = '';
-        $data = [];
-        // beach pool resort
+        $sql = DB::table('resorts')
+            ->where('categories.name','=', $request->category)
+            ->where('packages.rate','<=', $request->budget)
+            ->where('resorts.is_approve','=',1)
+            ->where('resorts.deleted_at','=', NULL)
+            ->join('category_resort','category_resort.resort_id','=','resorts.id')
+            ->join('categories','categories.id','=','category_resort.category_id')
+            ->join('packages','packages.resort_id','=','resorts.id')
+            ->select(
+                'resorts.id AS resort_id',
+              'resorts.name AS resort_name',
+              'resorts.address AS resort_address',
+              'resorts.description AS resort_description',
+              'categories.id AS category_id',
+              'categories.name AS category_name',
+              'packages.id AS package_id',
+              'packages.name AS package_name',
+              'packages.description AS package_description',
+              'packages.person AS package_person',
+              'packages.rate AS package_rate'
+                )
+            ->get();
 
-        if ($request->category === 'Resort') {
-            $cat = "
-            c.`name` = 'Pool' 
-            OR c.`name` = 'Beach'
-            ";
-        } else {
-            $cat = "c.`name` = '$request->category'";
-        }
-
-        $sql = DB::select('
-            SELECT
-              r.`id` AS resort_id,
-              r.`name` AS resort_name,
-              r.`address` AS resort_address,
-              r.`description` AS resort_description,
-              c.`id` AS category_id,
-              c.`name` AS category_name,
-              p.`id` AS package_id,
-              p.`name` AS package_name,
-              p.`description` AS package_description,
-              p.`person` AS package_person,
-              p.`rate` AS package_rate 
-            FROM
-              category_resort cr
-              INNER JOIN categories c
-                ON c.`id` = cr.`category_id`
-              INNER JOIN resorts r
-                ON r.`id` = cr.`resort_id`
-              INNER JOIN packages p
-                ON p.`resort_id` = r.`id`
-            WHERE (
-                ' . $cat . '
-              )
-              AND p.`rate` <= ' . $request->budget . '
-              AND r.`deleted_at` IS NULL
-              AND r.`is_approve` = 1
-            ');
 
         foreach ($sql as $index => $resort) {
 
-            $category = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('category_resort','category_resort.resort_id','=','resorts.id')
-                ->leftJoin('categories','categories.id','=','category_resort.category_id')
+            $category = DB::table('category_resort')
+                ->where('category_resort.resort_id','=', $resort->resort_id)
+                ->join('categories','categories.id','=','category_resort.category_id')
                 ->get();
 
-
-            $package = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('packages','packages.resort_id','resorts.id')
+            $package = DB::table('packages')
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
-            $entrance = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('entrances','entrances.resort_id','resorts.id')
+            $entrance = DB::table('entrances')
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
-            $cottage = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('cottages','cottages.resort_id','resorts.id')
+            $cottage = DB::table('cottages')
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
-            $amenity = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('amenities','amenities.resort_id','resorts.id')
+            $amenity = DB::table('amenities')
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
-            $frontpage = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
+            $frontpage = DB::table('images')
+                ->where('resort_id','=', $resort->resort_id)
                 ->where('images.is_frontpage','=', 1)
-                ->leftJoin('images','images.resort_id','resorts.id')
-                ->limit(1)
+                ->latest('updated_at')
                 ->first();
 
-            $image = Resort::query()
-                ->where('resorts.id','=', $resort->resort_id)
-                ->leftJoin('images','images.resort_id','resorts.id')
+            $image = DB::table('images')
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
-
 
             $categories = [];
             $packages = [];
@@ -228,7 +199,6 @@ class ResortApiController extends Controller
             $cottages = [];
             $amenities = [];
             $images = [];
-
 
             foreach ($category as $key => $c) {
                 $categories[$key] = $c->name;
@@ -267,7 +237,6 @@ class ResortApiController extends Controller
                 $images[$key]['location'] = $e->file_location;
                 $images[$key]['is_frontpage'] = $e->is_frontpage;
             }
-
 
             $result = [
                 'id' => $resort->resort_id,
@@ -342,7 +311,7 @@ class ResortApiController extends Controller
 
             }
 
-//  select the minimum rate of cottage per resort here, kamsa - love kaye :)
+            // select the minimum rate of cottage per resort here, kamsa - love kaye :)
             $selectMinCottageRatePerResort = DB::select("
                     SELECT *,count(*) as count FROM cottages 
                     WHERE resort_id = $id 
@@ -375,61 +344,50 @@ class ResortApiController extends Controller
         $finalSelected = DB::table('resorts')->whereIn('id', $selectedResort)->get();
 
         foreach ($finalSelected as $index => $resort) {
-            $category = DB::select('
-                SELECT 
-                  c.name
-                FROM
-                  category_resort cr 
-                  LEFT JOIN categories c 
-                    ON c.`id` = cr.`category_id` 
-                  LEFT JOIN resorts r 
-                    ON r.`id` = cr.`resort_id` 
-                WHERE r.`id` = ' . $resort->id . '
-                  AND r.`deleted_at` IS NULL 
-                GROUP BY cr.`category_id` 
-                ORDER BY r.`updated_at`
-            ');
+            $category = DB::table('category_resort')
+                ->where('category_resort.resort_id','=', $resort->id)
+                ->join('categories','categories.id','=','category_resort.category_id')
+                ->get();
 
-            $package = DB::select('
-                    SELECT 
-                      * 
-                    FROM
-                      packages 
-                    WHERE resort_id = ' . $resort->id . '
-            ');
+            $package = DB::table('packages')
+                ->where('resort_id','=', $resort->id)
+                ->get();
 
-            $entrance = DB::select('
-                SELECT 
-                  * 
-                FROM
-                  entrances 
-                WHERE resort_id = ' . $resort->id . '
-            ');
+            $entrance = DB::table('entrances')
+                ->where('resort_id','=', $resort->id)
+                ->get();
 
-            $cottage = DB::select('
-                SELECT 
-                  * 
-                FROM
-                  cottages 
-                WHERE resort_id = ' . $resort->id . '
-            ');
+            $cottage = DB::table('cottages')
+                ->where('resort_id','=', $resort->id)
+                ->get();
 
-            $amenity = DB::select('
-                SELECT 
-                  * 
-                FROM
-                  amenities 
-                WHERE resort_id = ' . $resort->id . '
-            ');
+            $amenity = DB::table('amenities')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $frontpage = DB::table('images')
+                ->where('resort_id','=', $resort->id)
+                ->where('images.is_frontpage','=', 1)
+                ->latest('updated_at')
+                ->first();
+
+            $image = DB::table('images')
+                ->where('resort_id','=', $resort->id)
+                ->get();
 
             $categories = [];
             $packages = [];
             $entrances = [];
             $cottages = [];
             $amenities = [];
+            $images = [];
 
             foreach ($category as $key => $c) {
                 $categories[$key] = $c->name;
+            }
+
+            foreach ($image as $key => $c) {
+                $images[$key]['location'] = $c->file_location;
             }
 
             foreach ($package as $key => $p) {
@@ -471,48 +429,24 @@ class ResortApiController extends Controller
                 'entrance' => $entrances,
                 'cottage' => $cottages,
                 'amenity' => $amenities,
+                'image' => $images,
+                'frontpage' => $frontpage
             ];
 
             array_push($data, $result);
         }
 
-        $test = [
+        $results = [
             'data' => $data,
             'result' => $finalSelected
         ];
 
-        return $test;
+        return $results;
 
     }
 
     public function trending()
     {
-        $likes = [];
-        $getResort = Resort::query()
-            ->where('is_approve','=',1)
-            ->latest()
-            ->get();
-
-        foreach ($getResort as $resort) {
-            $res = DB::table('likes')
-                ->leftJoin('resorts','resorts.id','=','likes.resort_id')
-                ->where('resorts.id','=', $resort->id)
-                ->count();
-            array_push($likes, $res);
-        }
-
-        $resorts = DB::table('likes')
-            ->leftJoin('resorts','resorts.id','=','likes.resort_id')
-            ->where('resorts.is_approve','=',1)
-            ->where('resorts.deleted_by','=','')
-            ->groupBy('resorts.id')
-            ->get();
-
-        $data = [
-            'resort' => $resorts,
-            'likes' => $likes
-        ];
-
-        return $data;
+        return 'no output';
     }
 }

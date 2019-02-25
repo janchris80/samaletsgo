@@ -38,6 +38,12 @@
                                     <input type="text" id="address" class="form-control" name="address" value="{{ old('address') }}" placeholder="Address">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="address" class="form-label">Front page Image</label>
+                                <div class="form-line">
+                                    <input type="file" class="form-control" name="file" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -86,19 +92,19 @@
                     <div class="card">
                         <div class="header">
                             <h2>Entrance & Cottage</h2>
-                            <ul class="header-dropdown">
-                                <li>
-                                    <button type="button" class="btn btn-primary" id="addEntrance">
-                                        Add Entrance
-                                    </button>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
 
                             <div class="card">
                                 <div class="header">
                                     <h2>Entrances</h2>
+                                    <ul class="header-dropdown">
+                                        <li>
+                                            <button type="button" class="btn btn-primary" id="addEntrance">
+                                                Add Entrance
+                                            </button>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="body">
                                     <div class="table-responsive">
