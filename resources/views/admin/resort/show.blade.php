@@ -229,7 +229,26 @@
     {{--type="text/javascript"></script>--}}
     <!-- Light Gallery Plugin Js -->
     <script src="{{ asset('assets/backend/plugins/light-gallery/js/lightgallery-all.min.js') }}"></script>
-
+    <script>
+        function approvePost(id) {
+            swal({
+                title: "Are you sure?",
+                text: "You want to approve this resort?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((result) => {
+                    if (result) {
+                        event.preventDefault();
+                        document.getElementById('approval-form').submit();
+                        swal("Done! Successfully Approve", {
+                            icon: "success",
+                        });
+                    }
+                });
+        }
+    </script>
     <script>
         $(function () {
             $('#aniimated-thumbnials').lightGallery({
