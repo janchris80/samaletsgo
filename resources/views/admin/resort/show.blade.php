@@ -28,9 +28,21 @@
                         @endforeach
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
-                                <a href="{{ route('owner.resort.edit', $resort->id) }}" class="btn btn-info waves-effect">
-                                    EDIT
-                                </a>
+                                @if($resort->is_approve == false)
+                                    <a href="javascript:void(0)" class="btn btn-success waves-effect" onclick="approvePost({{ $resort->id }})">
+                                        <i class="material-icons">done</i>
+                                        <span>Approve</span>
+                                    </a>
+                                    <form method="post" action="{{ route('admin.resort.update', $resort->id) }}" id="approval-form" style="display: none">
+                                        @csrf
+                                        @method('PUT')
+                                    </form>
+                                @else
+                                    <a type="button" class="btn btn-success" disabled>
+                                        <i class="material-icons">done</i>
+                                        <span>Approved</span>
+                                    </a>
+                                @endif
                             </li>
                         </ul>
                     </div>
