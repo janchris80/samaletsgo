@@ -486,7 +486,7 @@ class ResortApiController extends Controller
             array_push($result, $data);
         }
 
-        return collect($result)->sortByDesc('likes')->reverse()->toArray();
+        return collect($result)->sortByDesc('likes');
     }
 
     public function addLike(Request $request)
