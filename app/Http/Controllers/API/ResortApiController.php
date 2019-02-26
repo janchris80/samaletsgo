@@ -469,23 +469,26 @@ class ResortApiController extends Controller
     public function trending()
     {
         $result = [];
-        $resorts = Resort::query()
-            ->where('is_approve','=',1)
-            ->latest('updated_at')
+        $resorts = DB::table('resorts')
+            ->where('resorts.is_approve','=',1)
+            ->where('resorts.deleted_at','=', NULL)
+            ->join('likes','likes.resort_id','=','resorts.id')
+            ->groupBy('resorts.id')
             ->get();
 
-        foreach ($resorts as $resort) {
-            $res = DB::table('likes')
-                ->where('resort_id','=', $resort->id)
+        foreach ($resorts as $key => $resort) {
+            $like = DB::table('likes')
+                ->where('resort_id','=', $resort->resort_id)
                 ->count();
 
             $data = [
                 'resort' => $resort->name,
-                'likes' => $res
+                'likes' => $like
             ];
+
             array_push($result, $data);
         }
-
+//        dd(collect($result)->sortByDesc('likes'));
         return collect($result)->sortByDesc('likes');
     }
 
