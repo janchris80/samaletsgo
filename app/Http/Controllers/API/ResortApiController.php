@@ -485,7 +485,7 @@ class ResortApiController extends Controller
             ];
             array_push($result, $data);
         }
-        return $result;
+        return sort($result);
     }
 
     public function addLike(Request $request)
