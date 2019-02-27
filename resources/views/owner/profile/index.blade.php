@@ -13,7 +13,7 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img src="{{ asset("storage/profile/$profile->image") }}" alt="qwe" />
+                            <img src="{{ asset("storage/profile/$profile->image") }}" width="50%" alt="{{ $profile->image }}" />
                         </div>
                         <div class="content-area">
                             <h3 class="text-capitalize">{{ $profile->first_name }}</h3>
