@@ -21,7 +21,7 @@
                             <p class="text-uppercase">{{ $profile->role->name }}</p>
                         </div>
                         <div class="content-area">
-                            <form action="{{ route('admin.profile.update', $profile->id) }}" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.profile.update', $profile->id) }}" width="50%" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <input type="file" name="file" class="form-control">
