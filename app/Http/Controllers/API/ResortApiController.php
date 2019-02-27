@@ -150,6 +150,8 @@ class ResortApiController extends Controller
                 'resorts.id AS resort_id',
               'resorts.name AS resort_name',
               'resorts.address AS resort_address',
+              'resorts.lat AS resort_lat',
+              'resorts.lng AS resort_lng',
               'resorts.description AS resort_description',
               'categories.id AS category_id',
               'categories.name AS category_name',
@@ -254,6 +256,8 @@ class ResortApiController extends Controller
                 'name' => $resort->resort_name,
                 'address' => $resort->resort_address,
                 'description' => $resort->resort_description,
+                'lat' => $resort->resort_lat,
+                'lng' => $resort->resort_lng,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
@@ -303,6 +307,8 @@ class ResortApiController extends Controller
               resorts.id AS resort_id,
               resorts.name as resort_name,
               resorts.address as resort_address,
+              resorts.lat as resort_lat,
+              resorts.lng as resort_lng,
               resorts.description as resort_description
             FROM
               resorts
@@ -475,6 +481,8 @@ class ResortApiController extends Controller
                 'name' => $resort->resort_name,
                 'address' => $resort->resort_address,
                 'description' => $resort->resort_description,
+                'lat' => $resort->resort_lat,
+                'lng' => $resort->resort_lng,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
@@ -498,30 +506,138 @@ class ResortApiController extends Controller
 
     }
 
-    public function trending()
+    public function trending(Request $request)
     {
-        $result = [];
+        $data = [];
         $resorts = DB::table('resorts')
             ->where('resorts.is_approve','=',1)
             ->where('resorts.deleted_at','=', NULL)
             ->join('likes','likes.resort_id','=','resorts.id')
+            ->select(
+                'resorts.id AS resort_id',
+                'resorts.name AS resort_name',
+                'resorts.address AS resort_address',
+                'resorts.description AS resort_description',
+                'resorts.lat AS resort_lat',
+                'resorts.lng AS resort_lng'
+            )
             ->groupBy('resorts.id')
             ->get();
 
-        foreach ($resorts as $key => $resort) {
+        foreach ($resorts as $resort) {
+            $category = DB::table('category_resort')
+                ->where('category_resort.resort_id','=', $resort->resort_id)
+                ->join('categories','categories.id','=','category_resort.category_id')
+                ->get();
+
+            $package = DB::table('packages')
+                ->where('resort_id','=', $resort->resort_id)
+                ->get();
+
+            $entrance = DB::table('entrances')
+                ->where('resort_id','=', $resort->resort_id)
+                ->get();
+
+            $cottage = DB::table('cottages')
+                ->where('resort_id','=', $resort->resort_id)
+                ->get();
+
+            $amenity = DB::table('amenities')
+                ->where('resort_id','=', $resort->resort_id)
+                ->get();
+
+            $image = DB::table('images')
+                ->where('resort_id','=', $resort->resort_id)
+                ->get();
+
+            $frontpage = DB::table('images')
+                ->where('resort_id','=', $resort->resort_id)
+                ->where('is_frontpage','=', 1)
+                ->latest('updated_at')
+                ->first();
+
             $like = DB::table('likes')
+                ->where('resort_id','=', $resort->resort_id)
+                ->where('email','=', $request->email)
+                ->count();
+
+            $like_count = DB::table('likes')
                 ->where('resort_id','=', $resort->resort_id)
                 ->count();
 
-            $data = [
-                'resort' => $resort->name,
-                'likes' => $like
+            $categories = [];
+            $packages = [];
+            $entrances = [];
+            $cottages = [];
+            $amenities = [];
+            $images = [];
+
+            foreach ($category as $key => $c) {
+                $categories[$key]['name'] = $c->name;
+            }
+
+            foreach ($image as $key => $e) {
+                $images[$key]['name'] = $e->filename;
+                $images[$key]['location'] = $e->file_location;
+                $images[$key]['is_frontpage'] = $e->is_frontpage;
+            }
+
+            foreach ($package as $key => $p) {
+                $packages[$key]['name'] = $p->name;
+                $packages[$key]['description'] = $p->description;
+                $packages[$key]['rate'] = $p->rate;
+                $packages[$key]['person'] = $p->person;
+            }
+
+            foreach ($entrance as $key => $e) {
+                $entrances[$key]['agetype'] = $e->agetype;
+                $entrances[$key]['tour'] = $e->tour;
+                $entrances[$key]['description'] = $e->description;
+                $entrances[$key]['rate'] = $e->rate;
+                $entrances[$key]['person'] = $e->person;
+            }
+
+            foreach ($cottage as $key => $e) {
+                $cottages[$key]['name'] = $e->name;
+                $cottages[$key]['description'] = $e->description;
+                $cottages[$key]['rate'] = $e->rate;
+                $cottages[$key]['person'] = $e->person;
+            }
+
+            foreach ($amenity as $key => $e) {
+                $amenities[$key]['name'] = $e->name;
+                $amenities[$key]['description'] = $e->description;
+                $amenities[$key]['rate'] = $e->rate;
+            }
+
+
+            $result = [
+                'id' => $resort->resort_id,
+                'name' => $resort->resort_name,
+                'address' => $resort->resort_address,
+                'description' => $resort->resort_description,
+                'lat' => $resort->resort_lat,
+                'lng' => $resort->resort_lng,
+                'category' => $categories,
+                'package' => $packages,
+                'entrance' => $entrances,
+                'cottage' => $cottages,
+                'amenity' => $amenities,
+                'image' => $image,
+                'frontpage' => $frontpage,
+                'like' => $like,
+                'like_count' => $like_count,
             ];
 
-            array_push($result, $data);
+            array_push($data, $result);
         }
-//        dd(collect($result)->sortByDesc('likes'));
-        return $result;
+
+        $result_data = [
+            'result' => $resorts,
+            'data' => $data
+        ];
+
+        return $result_data;
     }
 
     public function addLike(Request $request)
