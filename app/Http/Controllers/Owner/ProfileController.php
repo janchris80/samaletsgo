@@ -23,7 +23,7 @@ class ProfileController extends Controller
             ->latest('updated_at')
             ->get();
 
-        return view('admin.profile.index',[
+        return view('owner.profile.index',[
             'profile' => Auth::user(),
             'resort' => $resort
         ]);
