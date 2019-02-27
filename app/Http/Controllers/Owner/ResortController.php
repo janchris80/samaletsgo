@@ -43,7 +43,7 @@ class ResortController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'name' => 'required|unique',
+            'name' => 'required|unique:resorts',
             'categories' => 'required',
             'address' => 'required',
             'description' => 'required',
