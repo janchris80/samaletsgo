@@ -59,7 +59,7 @@
                     <div class="card">
                         <div class="header">
                             <h2 class="text-capitalize">
-                                Amenity and Rate
+                                Amenities and Rates
                             </h2>
                         </div>
                         <div class="body">
@@ -93,7 +93,7 @@
                     <div class="card">
                         <div class="header">
                             <h2 class="text-capitalize">
-                                Entrance
+                                Entrances
                             </h2>
                         </div>
                         <div class="body">
@@ -130,7 +130,7 @@
                     <div class="card">
                         <div class="header">
                             <h2 class="text-capitalize">
-                                Cottage
+                                Cottages
                             </h2>
                         </div>
                         <div class="body">
@@ -167,7 +167,7 @@
                     <div class="card">
                         <div class="header">
                             <h2 class="text-capitalize">
-                                Package
+                                Packages
                             </h2>
                         </div>
                         <div class="body">
