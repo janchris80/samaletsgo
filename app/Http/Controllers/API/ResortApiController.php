@@ -381,7 +381,7 @@ class ResortApiController extends Controller
 
 
         foreach ($resorts as $resort) {
-            $category = DB::table('category_resort')
+            $categ = DB::table('category_resort')
                 ->where('category_resort.resort_id','=', $resort->id)
                 ->join('categories','categories.id','=','category_resort.category_id')
                 ->get();
@@ -428,7 +428,7 @@ class ResortApiController extends Controller
             $amenities = [];
             $images = [];
 
-            foreach ($category as $key => $c) {
+            foreach ($categ as $key => $c) {
                 $categories[$key]['name'] = $c->name;
             }
 
