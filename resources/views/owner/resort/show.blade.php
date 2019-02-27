@@ -118,7 +118,7 @@
                     <div class="card">
                         <div class="header">
                             <h2 class="text-capitalize">
-                                Cottage
+                                Cottages
                             </h2>
                         </div>
                         <div class="body">
