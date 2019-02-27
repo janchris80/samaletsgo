@@ -634,7 +634,7 @@ class ResortApiController extends Controller
             array_push($data, $result);
         }
 
-        $reeeeeeeeeeeeeeees = collect($resorts)->sortBy('like_count')->toArray();
+        $reeeeeeeeeeeeeeees = collect($resorts)->sortByDesc('like_count')->toArray();
 
         $result_data = [
             'result' => $reeeeeeeeeeeeeeees,
