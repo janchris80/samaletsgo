@@ -61,7 +61,7 @@ class ProfileController extends Controller
             Toastr::success('Successfully Changed Password' ,'Success');
         }
         else {
-            $images = $request->file('image');
+            $images = $request->file('file');
 
             if($request->hasFile('file')) {
                 $currentDate = Carbon::now()->toDateString();

@@ -24,7 +24,7 @@
                             <form action="{{ route('admin.profile.update', $profile->id) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
-                                <input type="file" name="image" class="form-control">
+                                <input type="file" name="file" class="form-control">
                                 <button class="btn btn-xs btn-danger btn-block" style="margin-top: 5px;">SUBMIT</button>
                             </form>
                         </div>
