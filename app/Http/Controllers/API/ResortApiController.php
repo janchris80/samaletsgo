@@ -112,6 +112,8 @@ class ResortApiController extends Controller
                 'name' => $resort->name,
                 'address' => $resort->address,
                 'description' => $resort->description,
+                'lat' => $resort->lat,
+                'lng' => $resort->lng,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
