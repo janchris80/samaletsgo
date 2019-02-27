@@ -72,8 +72,10 @@ class ResortApiController extends Controller
                 $categories[$key]['name'] = $c->name;
             }
 
-            foreach ($image as $key => $c) {
-                $images[$key]['location'] = $c->file_location;
+            foreach ($image as $key => $e) {
+                $images[$key]['name'] = $e->filename;
+                $images[$key]['location'] = $e->file_location;
+                $images[$key]['is_frontpage'] = $e->is_frontpage;
             }
 
             foreach ($package as $key => $p) {
@@ -407,8 +409,10 @@ class ResortApiController extends Controller
                 $categories[$key] = $c->name;
             }
 
-            foreach ($image as $key => $c) {
-                $images[$key]['location'] = $c->file_location;
+            foreach ($image as $key => $e) {
+                $images[$key]['name'] = $e->filename;
+                $images[$key]['location'] = $e->file_location;
+                $images[$key]['is_frontpage'] = $e->is_frontpage;
             }
 
             foreach ($package as $key => $p) {
