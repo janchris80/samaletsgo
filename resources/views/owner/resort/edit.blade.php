@@ -40,6 +40,22 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="address" class="form-label">Latitude and Longitude</label>
+                                <span>(<i>Optional</i> or <a href="https://www.latlong.net/">visit me</a>)</span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-line">
+                                            <input type="text" id="lat" class="form-control" name="lat" value="{{ $resort->lat }}" placeholder="Latitude">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-line">
+                                            <input type="text" id="lng" class="form-control" name="lng"value="{{ $resort->lng }}" placeholder="Longitude">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="address" class="form-label">Front page Image</label>
                                 <div class="form-line">
                                     <input type="file" class="form-control" name="file" />

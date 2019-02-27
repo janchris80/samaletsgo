@@ -54,6 +54,8 @@ class ResortController extends Controller
         $resort->name = $request->name;
         $resort->slug = str_slug($request->name);
         $resort->description = $request->description;
+        $resort->lat = $request->lat;
+        $resort->lng = $request->lng;
         $resort->address = $request->address;
         $resort->save();
 
@@ -229,6 +231,8 @@ class ResortController extends Controller
         $resort->name = $request->name;
         $resort->slug = str_slug($request->name);
         $resort->description = $request->description;
+        $resort->lat = $request->lat;
+        $resort->lng = $request->lng;
         $resort->address = $request->address;
         $resort->save();
 
