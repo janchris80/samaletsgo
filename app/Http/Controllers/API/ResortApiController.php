@@ -380,45 +380,45 @@ class ResortApiController extends Controller
         $data = [];
 
 
-        foreach ($selected_resort as $resort) {
+        foreach ($resorts as $resort) {
             $category = DB::table('category_resort')
-                ->where('category_resort.resort_id','=', $resort->id)
+                ->where('category_resort.resort_id','=', $resort->resort_id)
                 ->join('categories','categories.id','=','category_resort.category_id')
                 ->get();
 
             $package = DB::table('packages')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
             $entrance = DB::table('entrances')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
             $cottage = DB::table('cottages')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
             $amenity = DB::table('amenities')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
             $image = DB::table('images')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->get();
 
             $frontpage = DB::table('images')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->where('is_frontpage','=', 1)
                 ->latest('updated_at')
                 ->first();
 
             $like = DB::table('likes')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->where('email','=', $request->email)
                 ->count();
 
             $like_count = DB::table('likes')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->count();
 
             $categories = [];
@@ -468,10 +468,10 @@ class ResortApiController extends Controller
 
 
             $result = [
-                'id' => $resort->id,
-                'name' => $resort->name,
-                'address' => $resort->address,
-                'description' => $resort->description,
+                'id' => $resort->resort_id,
+                'name' => $resort->resort_name,
+                'address' => $resort->resort_address,
+                'description' => $resort->resort_description,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
