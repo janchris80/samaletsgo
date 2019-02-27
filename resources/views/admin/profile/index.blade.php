@@ -13,7 +13,7 @@
                     <div class="profile-header">&nbsp;</div>
                     <div class="profile-body">
                         <div class="image-area">
-                            <img src="{{ asset("storage/profile/$profile->image") }}" alt="qwe" />
+                            <img src="{{ asset("storage/profile/$profile->image") }}" width="50%" alt="qwe" />
                         </div>
                         <div class="content-area">
                             <h3 class="text-capitalize">{{ $profile->first_name }}</h3>
@@ -21,7 +21,7 @@
                             <p class="text-uppercase">{{ $profile->role->name }}</p>
                         </div>
                         <div class="content-area">
-                            <form action="{{ route('admin.profile.update', $profile->id) }}" style="width: 50%" method="post" enctype="multipart/form-data">
+                            <form action="{{ route('admin.profile.update', $profile->id) }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 @method('put')
                                 <input type="file" name="file" class="form-control">
