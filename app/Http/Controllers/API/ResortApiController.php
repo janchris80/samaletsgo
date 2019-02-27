@@ -250,10 +250,10 @@ class ResortApiController extends Controller
 
 
             $result = [
-                'id' => $resort->id,
-                'name' => $resort->name,
-                'address' => $resort->address,
-                'description' => $resort->description,
+                'id' => $resort->resort_id,
+                'name' => $resort->resort_name,
+                'address' => $resort->resort_address,
+                'description' => $resort->resort_description,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
@@ -269,7 +269,7 @@ class ResortApiController extends Controller
         }
 
         $result_data = [
-            'result' => $resort,
+            'result' => $resorts,
             'data' => $data
         ];
 
