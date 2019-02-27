@@ -29,6 +29,8 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Role</th>
+                                    {{--<th>Status</th>--}}
                                     <th>Update at</th>
                                     <th>Action</th>
                                 </tr>
@@ -38,9 +40,23 @@
                                     <tr>
                                         <td>{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td width="30xp">
+                                            <label class="label {{ $user->role_id == 1 ? 'label-success' : 'label-info' }}">
+                                                {{ $user->role->name }}
+                                            </label>
+                                        </td>
+                                        {{--<td width="30px">--}}
+                                        {{--{{ $user->status ? 'Active' : 'De-active' }}--}}
+                                        {{--</td>--}}
                                         <td width="170px">{{ date('M d, Y h:i:s A', strtotime($user->updated_at)) }}</td>
-                                        <td width="150px">
-                                            <button class="btn btn-warning">SET TO ADMIN</button>
+                                        <td width="130px">
+                                            <a href="javascript:void(0)" onclick="changeRole({{ $user->id }})" class="btn {{ $user->role->name == 'Admin' ? 'btn-info' : 'btn-success' }}">
+                                                <i class="material-icons">compare_arrows</i> Set as {{ $user->role_id == 1 ? 'Owner' : 'Admin' }}
+                                            </a>
+                                            <form id="changeRole{{ $user->id }}" action="{{ route('admin.account.update', $user->id) }}" method="POST">
+                                                @csrf
+                                                @method('put')
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -81,8 +97,24 @@
                     },
 
                 ],
-                order: [2, 'desc']
+                order: [3, 'desc']
             });
         });
+    </script>
+    <script>
+        function changeRole(id) {
+            swal({
+                title: 'Are you sure?',
+                icon: "warning",
+                buttons: {
+                    cancel: true,
+                    confirm: true,
+                },
+            }).then( changeRole => {
+                if(changeRole){
+                    $('#changeRole'+id).submit();
+                }
+            });
+        }
     </script>
 @endpush

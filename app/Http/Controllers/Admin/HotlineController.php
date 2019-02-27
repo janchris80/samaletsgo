@@ -13,7 +13,7 @@ class HotlineController extends Controller
     public function index()
     {
         $hotlines = Hotline::query()
-            ->latest()
+            ->latest('updated_at')
             ->get();
         return view('admin.hotline.index', [
             'hotlines' => $hotlines

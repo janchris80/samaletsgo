@@ -14,7 +14,7 @@ class TouristController extends Controller
     public function index()
     {
         $data = Tourist::query()
-            ->latest()
+            ->latest('updated_at')
             ->get();
         return view('admin.tourist.index',[
             'tourists' => $data

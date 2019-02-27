@@ -17,7 +17,7 @@ class ResortController extends Controller
     public function index()
     {
         $resorts = Resort::query()
-            ->latest()
+            ->latest('updated_at')
             ->get();
         return view('admin.resort.index',[
             'resorts' => $resorts

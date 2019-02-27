@@ -25,7 +25,7 @@ class ResortController extends Controller
     {
         $resorts = Resort::query()
             ->where('user_id','=', Auth::id())
-            ->latest()
+            ->latest('updated_at')
             ->get();
         return view('owner.resort.index',[
             'resorts' => $resorts
