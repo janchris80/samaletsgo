@@ -19,6 +19,7 @@ class ResortApiController extends Controller
             ->where('is_approve','=',1)
             ->latest('updated_at')
             ->get();
+
         foreach ($resorts as $resort) {
             $category = DB::table('category_resort')
                 ->where('category_resort.resort_id','=', $resort->id)
@@ -65,7 +66,6 @@ class ResortApiController extends Controller
             $entrances = [];
             $cottages = [];
             $amenities = [];
-            $likes = [];
             $images = [];
 
             foreach ($category as $key => $c) {
@@ -138,7 +138,7 @@ class ResortApiController extends Controller
     {
         $data = [];
 
-        $sql = DB::table('resorts')
+        $resorts = DB::table('resorts')
             ->where('categories.name','=', $request->category)
             ->where('packages.rate','<=', $request->budget)
             ->where('resorts.is_approve','=',1)
@@ -162,38 +162,46 @@ class ResortApiController extends Controller
             ->get();
 
 
-        foreach ($sql as $index => $resort) {
-
+        foreach ($resorts as $resort) {
             $category = DB::table('category_resort')
-                ->where('category_resort.resort_id','=', $resort->resort_id)
+                ->where('category_resort.resort_id','=', $resort->id)
                 ->join('categories','categories.id','=','category_resort.category_id')
                 ->get();
 
             $package = DB::table('packages')
-                ->where('resort_id','=', $resort->resort_id)
+                ->where('resort_id','=', $resort->id)
                 ->get();
 
             $entrance = DB::table('entrances')
-                ->where('resort_id','=', $resort->resort_id)
+                ->where('resort_id','=', $resort->id)
                 ->get();
 
             $cottage = DB::table('cottages')
-                ->where('resort_id','=', $resort->resort_id)
+                ->where('resort_id','=', $resort->id)
                 ->get();
 
             $amenity = DB::table('amenities')
-                ->where('resort_id','=', $resort->resort_id)
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $image = DB::table('images')
+                ->where('resort_id','=', $resort->id)
                 ->get();
 
             $frontpage = DB::table('images')
-                ->where('resort_id','=', $resort->resort_id)
-                ->where('images.is_frontpage','=', 1)
+                ->where('resort_id','=', $resort->id)
+                ->where('is_frontpage','=', 1)
                 ->latest('updated_at')
                 ->first();
 
-            $image = DB::table('images')
-                ->where('resort_id','=', $resort->resort_id)
-                ->get();
+            $like = DB::table('likes')
+                ->where('resort_id','=', $resort->id)
+                ->where('email','=', $request->email)
+                ->count();
+
+            $like_count = DB::table('likes')
+                ->where('resort_id','=', $resort->id)
+                ->count();
 
             $categories = [];
             $packages = [];
@@ -203,7 +211,13 @@ class ResortApiController extends Controller
             $images = [];
 
             foreach ($category as $key => $c) {
-                $categories[$key] = $c->name;
+                $categories[$key]['name'] = $c->name;
+            }
+
+            foreach ($image as $key => $e) {
+                $images[$key]['name'] = $e->filename;
+                $images[$key]['location'] = $e->file_location;
+                $images[$key]['is_frontpage'] = $e->is_frontpage;
             }
 
             foreach ($package as $key => $p) {
@@ -234,30 +248,28 @@ class ResortApiController extends Controller
                 $amenities[$key]['rate'] = $e->rate;
             }
 
-            foreach ($image as $key => $e) {
-                $images[$key]['name'] = $e->filename;
-                $images[$key]['location'] = $e->file_location;
-                $images[$key]['is_frontpage'] = $e->is_frontpage;
-            }
 
             $result = [
-                'id' => $resort->resort_id,
-                'name' => $resort->resort_name,
-                'address' => $resort->resort_address,
-                'description' => $resort->resort_description,
+                'id' => $resort->id,
+                'name' => $resort->name,
+                'address' => $resort->address,
+                'description' => $resort->description,
                 'category' => $categories,
                 'package' => $packages,
                 'entrance' => $entrances,
                 'cottage' => $cottages,
                 'amenity' => $amenities,
+                'image' => $image,
                 'frontpage' => $frontpage,
-                'image' => $images,
+                'like' => $like,
+                'like_count' => $like_count,
             ];
 
             array_push($data, $result);
         }
+
         $result_data = [
-            'result' => $sql,
+            'result' => $resort,
             'data' => $data
         ];
 
@@ -366,7 +378,9 @@ class ResortApiController extends Controller
 
         // array that will hold search result of resort
         $data = [];
-        foreach ($selected_resort as $index => $resort) {
+
+
+        foreach ($selected_resort as $resort) {
             $category = DB::table('category_resort')
                 ->where('category_resort.resort_id','=', $resort->id)
                 ->join('categories','categories.id','=','category_resort.category_id')
@@ -388,15 +402,24 @@ class ResortApiController extends Controller
                 ->where('resort_id','=', $resort->id)
                 ->get();
 
-            $frontpage = DB::table('images')
-                ->where('resort_id','=', $resort->id)
-                ->where('images.is_frontpage','=', 1)
-                ->latest('updated_at')
-                ->first();
-
             $image = DB::table('images')
                 ->where('resort_id','=', $resort->id)
                 ->get();
+
+            $frontpage = DB::table('images')
+                ->where('resort_id','=', $resort->id)
+                ->where('is_frontpage','=', 1)
+                ->latest('updated_at')
+                ->first();
+
+            $like = DB::table('likes')
+                ->where('resort_id','=', $resort->id)
+                ->where('email','=', $request->email)
+                ->count();
+
+            $like_count = DB::table('likes')
+                ->where('resort_id','=', $resort->id)
+                ->count();
 
             $categories = [];
             $packages = [];
@@ -406,7 +429,7 @@ class ResortApiController extends Controller
             $images = [];
 
             foreach ($category as $key => $c) {
-                $categories[$key] = $c->name;
+                $categories[$key]['name'] = $c->name;
             }
 
             foreach ($image as $key => $e) {
@@ -454,19 +477,21 @@ class ResortApiController extends Controller
                 'entrance' => $entrances,
                 'cottage' => $cottages,
                 'amenity' => $amenities,
-                'image' => $images,
-                'frontpage' => $frontpage
+                'image' => $image,
+                'frontpage' => $frontpage,
+                'like' => $like,
+                'like_count' => $like_count,
             ];
 
             array_push($data, $result);
         }
 
-        $test = [
+        $result_data = [
             'data' => $data,
             'result' => $selected_resort
         ];
 
-        return $test;
+        return $result_data;
 
     }
 
