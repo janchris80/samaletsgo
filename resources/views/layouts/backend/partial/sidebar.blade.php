@@ -74,12 +74,12 @@
             @endif
             <!-- Owner Navigation -->
             @if (Request::is('owner*'))
-                <li class="{{ Request::is('owner/dashboard') ? 'active' : '' }}">
-                    <a href="{{ route('owner.dashboard') }}">
-                        <i class="material-icons">dashboard</i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                {{--<li class="{{ Request::is('owner/dashboard') ? 'active' : '' }}">--}}
+                    {{--<a href="{{ route('owner.dashboard') }}">--}}
+                        {{--<i class="material-icons">dashboard</i>--}}
+                        {{--<span>Dashboard</span>--}}
+                    {{--</a>--}}
+                {{--</li>--}}
                 <li class="{{ Request::is('owner/resort*') || Request::is('owner/image*') ? 'active' : '' }}">
                     <a href="{{ route('owner.resort.index') }}">
                         <i class="material-icons">beach_access</i>
