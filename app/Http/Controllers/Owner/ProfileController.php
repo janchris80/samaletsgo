@@ -82,7 +82,7 @@ class ProfileController extends Controller
                 }
             }
         }
-        return redirect()->route('admin.profile.index');
+        return redirect()->route('owner.profile.index');
     }
 
     public function destroy($id)
