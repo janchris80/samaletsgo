@@ -28,7 +28,7 @@
                             <div class="row clearfix">
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>Event name</label>
+                                        <label>Tourist spot name</label>
                                         <div class="form-line">
                                             <input type="text" class="form-control text-capitalize" id="tourist_form_name" name="name" placeholder="Event name"
                                                    value="{{ $tourist->name }}" autofocus>
