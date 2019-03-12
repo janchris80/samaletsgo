@@ -66,7 +66,7 @@ class ResortController extends Controller
     {
         $resort->is_approve = 1;
         $resort->approve_by = Auth::user()->id;
-        $resort->approve_at = date();
+        $resort->approve_at = date("Y-m-d H:i:s");
         $resort->save();
 
         return back();
