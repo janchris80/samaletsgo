@@ -22,6 +22,7 @@ class CreateResortsTable extends Migration
             $table->string('address');
             $table->string('is_approve')->nullable();
             $table->unsignedInteger('approve_by')->nullable();
+            $table->date('approve_at')->nullable();
             $table->timestamps();
             $table->unsignedInteger('deleted_by')->nullable();
             $table->softDeletes();
