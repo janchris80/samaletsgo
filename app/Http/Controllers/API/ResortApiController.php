@@ -726,11 +726,11 @@ class ResortApiController extends Controller
             ];
 
             foreach ($data as $item) {
-                $rating += $item->rating;
+                $rating += floatval($item->rating);
             }
             array_push($resorts, $res);
             array_push($totalRating, $rating);
-            $rating = $rating / $data->count();
+            $rating = floatval($rating) / floatval($data->count());
             array_push($perRating, $rating);
             $rating = 0;
         }
