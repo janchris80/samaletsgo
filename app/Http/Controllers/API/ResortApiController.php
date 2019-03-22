@@ -692,7 +692,7 @@ class ResortApiController extends Controller
         return $data = [
             'message' => 'Already exist',
             'data' => $model,
-            'exist' => count($model) ? true : false,
+            'exist' => $model->count() ? true : false,
         ];
     }
 }
