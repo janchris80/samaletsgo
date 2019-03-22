@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Model\Category;
 use App\Model\Package;
 use App\Model\Resort;
+use App\Model\Review;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -663,5 +664,35 @@ class ResortApiController extends Controller
             ->delete();
 
         return 'success';
+    }
+
+    public function review(Request $request)
+    {
+        $model = Review::query()
+            ->where('email','=', $request->email)
+            ->where('resort_id','=', $request->resort_id)
+            ->get();
+
+        if (!$request['display']) {
+            if (!$model->count()) {
+                $model = new Review();
+                $model->resort_id = $request->resort_id;
+                $model->email = $request->email;
+                $model->rating = $request->rating;
+                $model->comment = $request->comment;
+                if (!$model->save()) {
+                    return $data = [
+                        'message' => 'Failed to save',
+                        'data' => $model,
+                        'exist' => false,
+                    ];
+                }
+            }
+        }
+        return $data = [
+            'message' => 'Already exist',
+            'data' => $model,
+            'exist' => count($model) ? true : false,
+        ];
     }
 }

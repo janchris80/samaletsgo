@@ -33,6 +33,7 @@ Route::post('resort/add-like', 'API\ResortApiController@addLike');
 Route::post('resort/remove-like', 'API\ResortApiController@removeLike');
 Route::post('resort/package', 'API\ResortApiController@package');
 Route::post('resort/custom', 'API\ResortApiController@custom');
+Route::post('resort/review', 'API\ResortApiController@review');
 Route::resource('event', 'API\EventApiController');
 Route::resource('hotline', 'API\HotlineApiController');
 Route::resource('tourist', 'API\TouristApiController');
