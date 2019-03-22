@@ -695,4 +695,54 @@ class ResortApiController extends Controller
             'exist' => $model->count() ? true : false,
         ];
     }
+
+    public function reviews()
+    {
+        $model = Review::query()
+            ->latest('updated_at')
+            ->groupBy('resort_id')
+            ->get();
+
+        $rating = 0;
+        $perRating = [];
+        $totalRating = [];
+        $resorts = [];
+
+        foreach ($model as $datum) {
+            $data = Review::query()
+                ->where('resort_id','=', $datum->resort_id)
+                ->get();
+
+            $resort = Resort::query()
+                ->find($datum->resort_id);
+
+            $res = [
+                'id' => $resort->id,
+                'name' => $resort->name,
+                'description' => $resort->description,
+                'address' => $resort->address,
+                'created_at' => $resort->created_at,
+                'updated_at' => $resort->updated_at
+            ];
+
+            foreach ($data as $item) {
+                $rating += $item->rating;
+            }
+            array_push($resorts, $res);
+            array_push($totalRating, $rating);
+            $rating = $rating / $data->count();
+            array_push($perRating, $rating);
+            $rating = 0;
+        }
+
+        $data = [
+            'perRating' => $perRating,
+            'totalRating' => $totalRating,
+            'resorts' => $resorts
+        ];
+
+//        dd($data);die;
+
+        return $data;
+    }
 }
