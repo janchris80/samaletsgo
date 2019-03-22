@@ -716,19 +716,106 @@ class ResortApiController extends Controller
             $resort = Resort::query()
                 ->find($datum->resort_id);
 
-            $res = [
+            $category = DB::table('category_resort')
+                ->where('category_resort.resort_id','=', $resort->id)
+                ->join('categories','categories.id','=','category_resort.category_id')
+                ->get();
+
+            $package = DB::table('packages')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $entrance = DB::table('entrances')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $cottage = DB::table('cottages')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $amenity = DB::table('amenities')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $image = DB::table('images')
+                ->where('resort_id','=', $resort->id)
+                ->get();
+
+            $frontpage = DB::table('images')
+                ->where('resort_id','=', $resort->id)
+                ->where('is_frontpage','=', 1)
+                ->latest('updated_at')
+                ->first();
+
+            $categories = [];
+            $packages = [];
+            $entrances = [];
+            $cottages = [];
+            $amenities = [];
+            $images = [];
+
+            foreach ($category as $key => $c) {
+                $categories[$key]['name'] = $c->name;
+            }
+
+            foreach ($image as $key => $e) {
+                $images[$key]['name'] = $e->filename;
+                $images[$key]['location'] = $e->file_location;
+                $images[$key]['is_frontpage'] = $e->is_frontpage;
+            }
+
+            foreach ($package as $key => $p) {
+                $packages[$key]['name'] = $p->name;
+                $packages[$key]['description'] = $p->description;
+                $packages[$key]['rate'] = $p->rate;
+                $packages[$key]['person'] = $p->person;
+            }
+
+            foreach ($entrance as $key => $e) {
+                $entrances[$key]['agetype'] = $e->agetype;
+                $entrances[$key]['tour'] = $e->tour;
+                $entrances[$key]['description'] = $e->description;
+                $entrances[$key]['rate'] = $e->rate;
+                $entrances[$key]['person'] = $e->person;
+            }
+
+            foreach ($cottage as $key => $e) {
+                $cottages[$key]['name'] = $e->name;
+                $cottages[$key]['description'] = $e->description;
+                $cottages[$key]['rate'] = $e->rate;
+                $cottages[$key]['person'] = $e->person;
+            }
+
+            foreach ($amenity as $key => $e) {
+                $amenities[$key]['name'] = $e->name;
+                $amenities[$key]['description'] = $e->description;
+                $amenities[$key]['rate'] = $e->rate;
+            }
+
+
+            $result = [
                 'id' => $resort->id,
                 'name' => $resort->name,
-                'description' => $resort->description,
                 'address' => $resort->address,
-                'created_at' => $resort->created_at,
-                'updated_at' => $resort->updated_at
+                'description' => $resort->description,
+                'lat' => $resort->lat,
+                'lng' => $resort->lng,
+                'category' => $categories,
+                'package' => $packages,
+                'entrance' => $entrances,
+                'cottage' => $cottages,
+                'amenity' => $amenities,
+                'image' => $image,
+                'frontpage' => $frontpage,
+                'like' => 0,
+                'like_count' => 0,
             ];
+
+            array_push($resorts, $result);
 
             foreach ($data as $item) {
                 $rating += floatval($item->rating);
             }
-            array_push($resorts, $res);
             array_push($totalRating, $rating);
             $rating = floatval($rating) / floatval($data->count());
             array_push($perRating, $rating);
