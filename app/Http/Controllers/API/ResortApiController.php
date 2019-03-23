@@ -108,7 +108,9 @@ class ResortApiController extends Controller
             foreach ($review as $item) {
                 $totalRating += floatval($item->rating);
             }
-            $rating = floatval($totalRating) / floatval($review->count());
+            if ($review->count()) {
+                $rating = floatval($totalRating) / floatval($review->count());
+            }
 
             $result = [
                 'id' => $resort->id,
@@ -258,7 +260,9 @@ class ResortApiController extends Controller
             foreach ($review as $item) {
                 $totalRating += floatval($item->rating);
             }
-            $rating = floatval($totalRating) / floatval($review->count());
+            if ($review->count()) {
+                $rating = floatval($totalRating) / floatval($review->count());
+            }
 
             $result = [
                 'id' => $resort->resort_id,
@@ -487,7 +491,9 @@ class ResortApiController extends Controller
             foreach ($review as $item) {
                 $totalRating += floatval($item->rating);
             }
-            $rating = floatval($totalRating) / floatval($review->count());
+            if ($review->count()) {
+                $rating = floatval($totalRating) / floatval($review->count());
+            }
 
             $result = [
                 'id' => $resort->resort_id,
