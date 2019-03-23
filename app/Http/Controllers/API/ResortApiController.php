@@ -53,14 +53,10 @@ class ResortApiController extends Controller
                 ->latest('updated_at')
                 ->first();
 
-            $like = DB::table('likes')
+            $review = DB::table('reviews')
                 ->where('resort_id','=', $resort->id)
-                ->where('email','=', $request->email)
-                ->count();
-
-            $like_count = DB::table('likes')
-                ->where('resort_id','=', $resort->id)
-                ->count();
+                ->latest('updated_at')
+                ->get();
 
             $categories = [];
             $packages = [];
@@ -68,6 +64,8 @@ class ResortApiController extends Controller
             $cottages = [];
             $amenities = [];
             $images = [];
+            $rating = 0;
+            $totalRating = 0;
 
             foreach ($category as $key => $c) {
                 $categories[$key]['name'] = $c->name;
@@ -107,6 +105,10 @@ class ResortApiController extends Controller
                 $amenities[$key]['rate'] = $e->rate;
             }
 
+            foreach ($review as $item) {
+                $totalRating += floatval($item->rating);
+            }
+            $rating = floatval($totalRating) / floatval($review->count());
 
             $result = [
                 'id' => $resort->id,
@@ -122,8 +124,10 @@ class ResortApiController extends Controller
                 'amenity' => $amenities,
                 'image' => $image,
                 'frontpage' => $frontpage,
-                'like' => $like,
-                'like_count' => $like_count,
+                'like' => 0,
+                'like_count' => 0,
+                'rating' => $rating,
+                'totalRating' => $totalRating
             ];
 
             array_push($data, $result);
@@ -199,14 +203,10 @@ class ResortApiController extends Controller
                 ->latest('updated_at')
                 ->first();
 
-            $like = DB::table('likes')
-                ->where('resort_id','=', $resort->resort_id)
-                ->where('email','=', $request->email)
-                ->count();
-
-            $like_count = DB::table('likes')
-                ->where('resort_id','=', $resort->resort_id)
-                ->count();
+            $review = DB::table('reviews')
+                ->where('resort_id','=', $resort->id)
+                ->latest('updated_at')
+                ->get();
 
             $categories = [];
             $packages = [];
@@ -214,6 +214,8 @@ class ResortApiController extends Controller
             $cottages = [];
             $amenities = [];
             $images = [];
+            $rating = 0;
+            $totalRating = 0;
 
             foreach ($category as $key => $c) {
                 $categories[$key]['name'] = $c->name;
@@ -253,6 +255,10 @@ class ResortApiController extends Controller
                 $amenities[$key]['rate'] = $e->rate;
             }
 
+            foreach ($review as $item) {
+                $totalRating += floatval($item->rating);
+            }
+            $rating = floatval($totalRating) / floatval($review->count());
 
             $result = [
                 'id' => $resort->resort_id,
@@ -268,8 +274,10 @@ class ResortApiController extends Controller
                 'amenity' => $amenities,
                 'image' => $image,
                 'frontpage' => $frontpage,
-                'like' => $like,
-                'like_count' => $like_count,
+                'like' => 0,
+                'like_count' => 0,
+                'rating' => $rating,
+                'totalRating' => $totalRating
             ];
 
             array_push($data, $result);
@@ -424,14 +432,10 @@ class ResortApiController extends Controller
                 ->latest('updated_at')
                 ->first();
 
-            $like = DB::table('likes')
-                ->where('resort_id','=', $resort->resort_id)
-                ->where('email','=', $request->email)
-                ->count();
-
-            $like_count = DB::table('likes')
-                ->where('resort_id','=', $resort->resort_id)
-                ->count();
+            $review = DB::table('reviews')
+                ->where('resort_id','=', $resort->id)
+                ->latest('updated_at')
+                ->get();
 
             $categories = [];
             $packages = [];
@@ -439,6 +443,8 @@ class ResortApiController extends Controller
             $cottages = [];
             $amenities = [];
             $images = [];
+            $rating = 0;
+            $totalRating = 0;
 
             foreach ($categ as $key => $c) {
                 $categories[$key]['name'] = $c->name;
@@ -478,6 +484,10 @@ class ResortApiController extends Controller
                 $amenities[$key]['rate'] = $e->rate;
             }
 
+            foreach ($review as $item) {
+                $totalRating += floatval($item->rating);
+            }
+            $rating = floatval($totalRating) / floatval($review->count());
 
             $result = [
                 'id' => $resort->resort_id,
@@ -493,8 +503,10 @@ class ResortApiController extends Controller
                 'amenity' => $amenities,
                 'image' => $image,
                 'frontpage' => $frontpage,
-                'like' => $like,
-                'like_count' => $like_count,
+                'like' => 0,
+                'like_count' => 0,
+                'rating' => $rating,
+                'totalRating' => $totalRating
             ];
 
             array_push($data, $result);
