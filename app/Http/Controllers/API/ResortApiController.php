@@ -126,8 +126,8 @@ class ResortApiController extends Controller
                 'frontpage' => $frontpage,
                 'like' => 0,
                 'like_count' => 0,
-                'rating' => $rating,
-                'totalRating' => $totalRating
+                'rating' => number_format($rating,2,'.',''),
+                'totalRating' => number_format($totalRating,2,'.','')
             ];
 
             array_push($data, $result);
@@ -276,8 +276,8 @@ class ResortApiController extends Controller
                 'frontpage' => $frontpage,
                 'like' => 0,
                 'like_count' => 0,
-                'rating' => $rating,
-                'totalRating' => $totalRating
+                'rating' => number_format($rating,2,'.',''),
+                'totalRating' => number_format($totalRating,2,'.','')
             ];
 
             array_push($data, $result);
@@ -505,8 +505,8 @@ class ResortApiController extends Controller
                 'frontpage' => $frontpage,
                 'like' => 0,
                 'like_count' => 0,
-                'rating' => $rating,
-                'totalRating' => $totalRating
+                'rating' => number_format($rating,2,'.',''),
+                'totalRating' => number_format($totalRating,2,'.','')
             ];
 
             array_push($data, $result);
@@ -828,9 +828,9 @@ class ResortApiController extends Controller
             foreach ($data as $item) {
                 $rating += floatval($item->rating);
             }
-            array_push($totalRating, $rating);
+            array_push($totalRating, number_format($rating,2,'.',''));
             $rating = floatval($rating) / floatval($data->count());
-            array_push($perRating, $rating);
+            array_push($perRating, number_format($rating,2,'.',''));
             $rating = 0;
         }
 
@@ -840,7 +840,7 @@ class ResortApiController extends Controller
             'resorts' => $resorts
         ];
 
-//        dd($data);die;
+        dd($data);die;
 
         return $data;
     }
