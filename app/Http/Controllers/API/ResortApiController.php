@@ -846,7 +846,7 @@ class ResortApiController extends Controller
             'resorts' => $resorts
         ];
 
-        dd($data);die;
+//        dd($data);die;
 
         return $data;
     }
