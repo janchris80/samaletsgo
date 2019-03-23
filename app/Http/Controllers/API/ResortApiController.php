@@ -206,7 +206,7 @@ class ResortApiController extends Controller
                 ->first();
 
             $review = DB::table('reviews')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->latest('updated_at')
                 ->get();
 
@@ -437,7 +437,7 @@ class ResortApiController extends Controller
                 ->first();
 
             $review = DB::table('reviews')
-                ->where('resort_id','=', $resort->id)
+                ->where('resort_id','=', $resort->resort_id)
                 ->latest('updated_at')
                 ->get();
 
